@@ -36,8 +36,7 @@ function draw()
 
   background("skyblue");
 
-  // camera.zoom = height/900;
-  camera.zoom = 0.5;;
+  camera.zoom = height/900;
   
   player.play();
   player.cameraMove(0.1);
