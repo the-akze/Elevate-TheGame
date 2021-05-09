@@ -61,7 +61,7 @@ class BaseClass
 
         this.sprite.x = this.body.position.x;
         this.sprite.y = this.body.position.y;
-        this.sprite.rotation = this.body.angle;
+        this.sprite.rotation = 180*this.body.angle/PI;
     }
 
     resetPosition()

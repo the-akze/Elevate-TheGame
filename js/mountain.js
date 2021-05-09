@@ -3,41 +3,47 @@ class Mountain
     constructor(color)
     {
         allBodyItems.push(this);
-        var bodyOptions=
-        {
-            restitution:0,
-            frictionAir:0,
-            friction:0.75,
-            isStatic:true
-        }
-
+        
         var vertices = [
             {x: 1600, y : 900},
-            {x: 1600, y : 700}
+            {x: 1600, y : 700},
+            {x: 20000, y: 700},
+            {x: 20000, y: 900}
         ]
+
+        this.highestPoint = {x: 1600, y: 700};
         
-        this.mtnParts = [
-            new MountainPart(vertices, "gray")
-        ]
+        this.mtnParts = []
         
+        this.mtnParts.push(new MountainPart(vertices, "gray"));
+
+        this.mtnVertices = [vertices[0]];
+
         // camera.zoom = 0.02;
-        
-        // for (var i = 0; i < 10; i++)
-        // {
-        //     this.generateVertices();
-        // }
 
         this.color = color;
-    }
 
-    //unfinished function...
-    // generateMountain()
-    // {
-    //     var btmV = this.mtnParts[this.mtnParts.length - 1].vertices[1];
-    //     var angle = random(0, -PI/2);
-    //     var v = angleToVector(angle);
-    //     this.mtnParts.push(new MountainPart([btmV, btmV]))
-    // }
+    }
+    
+    generateMountain()
+    {
+        var btmV = this.highestPoint;
+        var angle = random(-PI/4, -PI/2);
+        var v = angleToVector(angle);
+        var length = random(50, 200);
+        var topV = 
+        {
+            x: btmV.x + v.x * length,
+            y: btmV.y + v.y * length
+        };
+        // var length = random(100, 200);
+        var verts = [topV, btmV, {x: btmV.x + 20000, y: btmV.y}, {x: topV.x + 20000, y: topV.y}];
+        var newMtn = new MountainPart(verts, "gray", angle);
+        this.mtnParts.push(newMtn);
+        this.mtnVertices.push(btmV);
+        this.highestPoint.x = topV.x;
+        this.highestPoint.y = topV.y;
+    }
 
     // generateMountainVertices()
     // {

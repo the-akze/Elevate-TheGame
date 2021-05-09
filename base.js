@@ -2,6 +2,10 @@ var allBodyItems = [];
 
 var allGrounds = [];
 
+var allMtnParts = [];
+
+var allTrees = [];
+
 var voidY = 3000;
 
 function displayBody(body, color)
@@ -18,9 +22,23 @@ function displayBody(body, color)
     pop();
 }
 
-function clamp(value, max, min)
+function displayVertices(vertices, color)
 {
-    return (value > max ? max : value < min ? min : value);
+    push();
+    noStroke();
+    fill(color);
+    beginShape();
+    for (var v in vertices)
+    {
+        vertex(vertices[v].x, vertices[v].y);
+    }
+    endShape(CLOSE);
+    pop();
+}
+
+function clamp(value, min, max)
+{
+    return ((value > max) ? (max) : ((value < min) ? (min) : (value)));
 }
 
 //commented because unused

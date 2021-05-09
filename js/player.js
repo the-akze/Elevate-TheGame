@@ -30,7 +30,7 @@ class Player extends BaseClass
         //Make sure it only goes up to a specific speed, that too, only if it is on the ground
         if (this.grounded)
         {
-            Matter.Body.setVelocity(this.body, {x: clamp(this.body.velocity.x, this.moveSpeed, -this.moveSpeed), y: this.body.velocity.y});
+            Matter.Body.setVelocity(this.body, {x: clamp(this.body.velocity.x, -this.moveSpeed, this.moveSpeed), y: this.body.velocity.y});
         }
 
         if (direction == 0)
@@ -50,8 +50,18 @@ class Player extends BaseClass
 
     updateGroundSensor()
     {
-        this.groundSensor.x = this.body.position.x;
-        this.groundSensor.y = this.body.position.y + (this.height/2);
+        // this.groundSensor.x = this.body.position.x;
+        // this.groundSensor.y = this.body.position.y + (this.height/2);
+
+        var offset = angleToVector(-this.body.angle);
+
+        this.groundSensor.x = this.body.position.x - offset.x * this.height/2;
+        this.groundSensor.y = this.body.position.y - offset.y * this.height/2;
+
+
+        //.add(createSprite((vertices[0].x + vertices[1].x)/2, (vertices[0].y + vertices[1].y)/2, dist(vertices[0].x, vertices[0].y, vertices[1].x, vertices[1].y), 5));
+        this.groundSensor.rotation = (180*this.body.angle/PI);
+
         this.grounded = this.checkGrounded();
     }
 
@@ -71,7 +81,9 @@ class Player extends BaseClass
     {
         if (this.grounded)
         {
-            Matter.Body.applyForce(this.body, {x: this.body.position.x, y: this.body.position.y + height*(0.4)}, {x: 0, y: force});
+            var direction = angleToVector(this.body.angle);
+            Matter.Body.applyForce(this.body, {x: this.body.position.x, y: this.body.position.y}, {x: direction.x*force, y: -direction.y*force});
+            console.log(direction);
         }
     }
 
@@ -88,8 +100,16 @@ class Player extends BaseClass
     //play, what it does each frame supposedly
     play()
     {
-        Matter.Body.setAngle(this.body, 0);
-        Matter.Body.setAngularVelocity(this.body, 0);
+        if (clamp(this.body.angle, -PI/6, PI/6) != this.body.angle)
+        {
+            Matter.Body.setAngle(this.body, clamp(this.body.angle, -PI/6, PI/6));
+            Matter.Body.setAngularVelocity(this.body, 0);
+        }
+        Matter.Body.setAngularVelocity(this.body, lerp(this.body.angularVelocity, -this.body.angle, 0.01));
+        if (this.grounded)
+        {
+            // Matter.Body.setAngularVelocity(this.body, 0);
+        }
         // Matter.Body.setPosition(this.groundSensor, {x: this.body.position.x, y: this.body.position.y + (this.height/2)});
         // Matter.Body.setVelocity(this.groundSensor, this.body.velocity);
         this.move((keyDown("right") || keyDown("d")) - (keyDown("left") || keyDown("a")));
@@ -105,6 +125,11 @@ class Player extends BaseClass
         {
             this.resetPosition();
             camera.position = {x: this.body.position.x, y: this.body.position.y};
+        }
+
+        if (Math.abs(mountain.highestPoint.y - this.body.position.y) < 1500)
+        {
+            mountain.generateMountain();
         }
     }
 }
