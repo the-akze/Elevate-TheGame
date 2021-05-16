@@ -1,9 +1,9 @@
-// var ref = document.referrer.replace("http://", "").replace("https://", "").replace("/", "");
-// var host = document.location.host;
-// if (ref != host)
-// {
-//   window.location.replace("..");
-// }
+var ref = document.referrer.replace("http://", "").replace("https://", "").replace("/", "");
+var host = document.location.host;
+if (ref != host)
+{
+  window.location.replace("..");
+}
 
 var rocketImg, youWonImg;
 
@@ -45,7 +45,7 @@ function draw()
     text("You won!", 1000, 700);
     strokeWeight(3);
     textSize(30);
-    text("Go back to " + document.location.host + " to play again...", 1000, 750);
+    text("Go back to the game play again...", 1000, 750);
 
     camera.zoom = height/900;
 
