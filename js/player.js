@@ -339,8 +339,8 @@ class Player extends BaseClass
         }
 
         
-        translate(this.sprite.x - (this.sprite.width*6*uiSizeMultiplier) / (lerpZoom/0.6), this.sprite.y + (this.sprite.height*1.5*uiSizeMultiplier) / (lerpZoom/0.6));
-        var yOffset = 0;
+        translate(this.sprite.x - (this.sprite.width*6*uiSizeMultiplier) / (lerpZoom/0.6), this.sprite.y + (this.sprite.height*uiSizeMultiplier) / (lerpZoom/0.6));
+        var yOffset = -70*uiSizeMultiplier / (lerpZoom/0.6);
         for (var i in this.inventory.content.materials)
         {
             yOffset += 35*uiSizeMultiplier / (lerpZoom/0.6);
@@ -352,7 +352,7 @@ class Player extends BaseClass
             text(this.inventory.content.materials[i], 0, yOffset);
             pop();
         }
-        text("MATERIALS", 0, -50*uiSizeMultiplier / (lerpZoom/0.6));
+        text("MATERIALS", 0, -100*uiSizeMultiplier / (lerpZoom/0.6));
         if (yOffset == 0)
         {
             textAlign(LEFT);
