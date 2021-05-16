@@ -2,6 +2,11 @@ class BaseClass
 {
     constructor(x, y, width, height, color, image)
     {
+        if ((y + (height/2) + 1000) > voidY)
+        {
+            voidY = y + (height/2) + 1000;
+
+        }
         allBodyItems.push(this);
         var bodyOptions=
         {
@@ -24,40 +29,29 @@ class BaseClass
         this.color = color;
 
         this.sprite = createSprite(x, y, this.width, this.height);
+        this.sprite.shapeColor = color;
+
+        this.image = null;
         if (image)
         {
-            this.sprite.setImage(image);
-        }
-        else
-        {
-            this.sprite.shapeColor = color;
+            this.image = (((typeof image) == "string") ? loadImage(image) : image);
+            this.sprite.visible = false;
         }
     }
 
     display()
     {
-        // if (this.image)
-        // {
-        //     var angle = this.body.angle;
-        //     push();
-        //     translate(this.body.position.x, this.body.position.y);
-        //     rotate(angle);
-        //     imageMode(CENTER);
-        //     image(this.image, 0, 0, this.width, this.height);
-        //     pop();
-        // }
-        // else
-        // {
-        //     var angle = 180*this.body.angle/PI;
-        //     push();
-        //     noStroke();
-        //     translate(this.body.position.x, this.body.position.y);
-        //     fill(this.color);
-        //     rotate(angle);
-        //     rectMode(CENTER);
-        //     rect(0, 0, this.width, this.height);
-        //     pop();
-        // }
+        if (this.image)
+        {
+
+            var angle = this.sprite.rotation;
+            push();
+            translate(this.body.position.x, this.body.position.y);
+            rotate(angle);
+            imageMode(CENTER);
+            image(this.image, 0, 0, this.width, this.height);
+            pop();
+        }
 
         this.sprite.x = this.body.position.x;
         this.sprite.y = this.body.position.y;

@@ -6,9 +6,27 @@ var allMtnParts = [];
 
 var allTrees = [];
 
+var allWaterBodies = [];
+
+var allMinable = [];
+
+var allCotton = [];
+
+var allRopable = [];
+
+var allNotifications = [];
+
+var mainMountain = null;
+
 var voidY = 3000;
 
-function displayBody(body, color)
+var base = {};
+base.mathStuff = {};
+base.renderStuff = {};
+base.gameStuff = {};
+base.assets = {};
+
+base.renderStuff.displayBody = (body, color) =>
 {
     push();
     noStroke();
@@ -22,56 +40,59 @@ function displayBody(body, color)
     pop();
 }
 
-function displayVertices(vertices, color)
+base.renderStuff.progressBar = (x1, y1, x2, y2, barColor, bgColor, value) =>
 {
     push();
     noStroke();
-    fill(color);
-    beginShape();
-    for (var v in vertices)
-    {
-        vertex(vertices[v].x, vertices[v].y);
-    }
-    endShape(CLOSE);
+    rectMode(CORNERS);
+    fill(bgColor);
+    rect(x1, y1, x2, y2);
+    fill(barColor);
+    rect(x1, y1, lerp(x1, x2, value), y2);
     pop();
 }
 
-function clamp(value, min, max)
+base.mathStuff.clamp = (value, min, max) =>
 {
     return ((value > max) ? (max) : ((value < min) ? (min) : (value)));
 }
 
-//commented because unused
-
-// function moveTowards(from, to, step)
-// {
-//     if (from + step < from)
-//     {
-//         if (from + step < to)
-//         {
-//             return to;
-//         }
-//     }
-//     if (from + step > from)
-//     {
-//         if (from + step > to)
-//         {
-//             return to;
-//         }
-//     }
-//     return from + step;
-// }
-
-function normalize(x, y)
+base.mathStuff.normalize = (x, y, newMagnitude) =>
 {
     var magnitude = Math.sqrt((x*x) + (y*y));
-    return {x: x/magnitude, y: y/magnitude};
+    return {x: newMagnitude * x/magnitude, y: newMagnitude * y/magnitude};
 }
 
-function angleToVector(angle)
+base.mathStuff.angleToVector = (angle) =>
 {
     return {
         x: -Math.sin(angle),
         y: -Math.cos(angle)
     };
+}
+
+base.mathStuff.toDirection = (x) =>
+{
+    return ((x > 0) ? 1 : ((x < 0) ? -1 : 0));
+}
+
+base.mathStuff.magnitude = (x, y) =>
+{
+    return Math.sqrt((x*x) + (y*y));
+}
+
+base.gameStuff.doZoom = (increase, defaultZoom) =>
+{
+    if (keyDown("o"))
+    {
+        zoom *= 1/increase;
+    }
+    if (keyDown("p"))
+    {
+        zoom *= increase;
+    }
+    if (keyDown("l"))
+    {
+        zoom = defaultZoom;
+    }
 }
