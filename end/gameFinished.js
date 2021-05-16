@@ -1,8 +1,9 @@
-var ref = document.referrer.replace("http://", "").replace("https://", "").replace("/", "");
-var host = document.location.host;
-if (ref != host)
+if (document.location.host == "ayy-akshat.github.io")
 {
-  window.location.replace("..");
+  if (document.referrer != "https://ayy-akshat.github.io/Elevate-TheGame/")
+  {
+    window.location.replace("..");
+  }
 }
 
 var rocketImg, youWonImg;
@@ -22,7 +23,6 @@ function setup()
   rocketImg = loadImage("rocket.png");
   youWonImg = loadImage("youWon.png");
 }
-
 
 function draw()
 {
