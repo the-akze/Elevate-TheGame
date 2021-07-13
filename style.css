@@ -1,7 +1,108 @@
+* {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
 html, body {
   margin: 0;
   padding: 0;
+  background-color: lightblue;
 }
+
 canvas {
   display: block;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.buttoncontainer {
+  position: fixed;
+  z-index: 20;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
+
+}
+
+.gamebutton {
+  margin: 10px;
+  width: 50px;
+  height: 50px;
+  backdrop-filter: blur(10px);
+  background-color: rgba(177, 127, 61, 0.2);
+  box-shadow: 3px 3px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: 0.2s;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.gamebutton:hover {
+  transform: scale(1.1);
+}
+
+.gamebutton:active {
+  background-color: rgba(112, 112, 112, 0.5);
+  box-shadow: none;
+}
+
+/* button images */
+#pauseBtn {
+  background-image: url("assets/buttons/settings.svg");
+}
+
+#inventoryBtn {
+  background-image: url("assets/buttons/inventory.svg");
+}
+
+.pausemenu {
+  position: fixed;
+  display: block;
+  left: 50%;
+  top: -50%;
+  transform: translate(-50%, -50%);
+  width: 60vw;
+  height: 80vh;
+  max-height: 80%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 10;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  backdrop-filter: blur(20px);
+  overflow: auto;
+  transition: 1s;
+}
+
+.pausemenu button {
+  width: 80%;
+  background-color:rgba(0, 0, 0, 0.5);
+  border: 0;
+  color: white;
+  font-size: 20px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+button {
+  cursor: pointer;
+}
+
+#backToGameBtn {
+  width: 100px;
+  height: 200px;
+  background-color: rgba(49, 64, 151, 0.5);
+}
+
+#backToGameBtn:hover {
+  transform: scale(1.2) translate(-5%, 5%);
+}
+
+.buttoncontainer #backToGameBtn h1 {
+  text-align: center;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  color: lightgray;
 }

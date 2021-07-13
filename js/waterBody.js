@@ -29,17 +29,20 @@ class WaterBody
                 y: y - (height/2)
             }
         );
-        for (var subDivX = x - (width/2) + (0.5*width/subDivisions); subDivX < x + (width/2); subDivX += width/subDivisions)
+        if (subDivisions > 1)
         {
-            var newSprite = createSprite(subDivX, y - (height/2), 0.8*width/subDivisions, 10);
-            newSprite.velocityY = random(-5, 5);
-            newSprite.visible = false;
-            this.vertices.push(
-                {
-                    static: false,
-                    sprite: newSprite
-                }
-            );
+            for (var subDivX = x - (width/2) + (0.5*width/subDivisions); subDivX < x + (width/2); subDivX += width/subDivisions)
+            {
+                var newSprite = createSprite(subDivX, y - (height/2), 0.8*width/subDivisions, 10);
+                newSprite.visible = false;
+                this.vertices.push(
+                    {
+                        static: false,
+                        sprite: newSprite,
+                        velocityY: random(-1, 1)
+                    }
+                );
+            }
         }
 
         this.width = width;
@@ -49,6 +52,10 @@ class WaterBody
 
     affectBodies(drag)
     {
+        if (!buttonStuff.settings.dynamicWater)
+        {
+            return;
+        }
         for (var i = 0; i < allBodyItems.length; i++)
         {
             if (allBodyItems[i].sprite.isTouching(this.sprite))
@@ -57,9 +64,15 @@ class WaterBody
             }
         }
     }
-
+    
     display()
     {
+        if (!buttonStuff.settings.dynamicWater)
+        {
+            this.sprite.visible = true;
+            return;
+        }
+        this.sprite.visible = false;
         push();
         noStroke();
         fill(this.sprite.shapeColor.levels[0], this.sprite.shapeColor.levels[1], this.sprite.shapeColor.levels[2], this.sprite.shapeColor.levels[3]);
@@ -81,21 +94,26 @@ class WaterBody
     
     dynamicWater(bodyEffectiveness, returnEffectiveness, rippleEffectiveness)
     {
+        if (!buttonStuff.settings.dynamicWater)
+        {
+            return;
+        }
         for (var v in this.vertices)
         {
             if (this.vertices[v].static == true)
             {
                 continue;
             }
-            var currentSprite = this.vertices[v].sprite;
-            for (var b in allBodyItems)
+            // var currentSprite = this.vertices[v].sprite;
+            var currentVertice = this.vertices[v];
+            if (player.sprite.isTouching(this.vertices[v].sprite))
             {
-                if (allBodyItems[b].sprite.isTouching(this.vertices[v].sprite))
-                {
-                    currentSprite.velocityY += allBodyItems[b].body.velocity.y * bodyEffectiveness;
-                }
+                // currentSprite.velocityY += player.body.velocity.y * bodyEffectiveness;
+                currentVertice.velocityY += player.body.velocity.y * bodyEffectiveness;
             }
-            currentSprite.velocityY = lerp(currentSprite.velocityY, (this.surfaceY - currentSprite.y), returnEffectiveness);
+            // currentSprite.velocityY = lerp(currentSprite.velocityY, (this.surfaceY - currentSprite.y), returnEffectiveness);
+            currentVertice.velocityY = lerp(currentVertice.velocityY, (this.surfaceY - currentVertice.sprite.y), returnEffectiveness);
+            currentVertice.sprite.y += currentVertice.velocityY;
         }
 
         for (var i = 0; i < this.vertices.length; i++)

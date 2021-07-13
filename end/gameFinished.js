@@ -45,7 +45,7 @@ function draw()
     text("You won!", 1000, 700);
     strokeWeight(3);
     textSize(30);
-    text("Go back to the game to play again...", 1000, 750);
+    text("Click \n\"Play the game again\"\nto play again...", 1000, 750);
 
     camera.zoom = height/900;
 

@@ -3,6 +3,7 @@
   <head>
     <title>Elevate - You beat the game!</title>
     <link rel="icon" href="../assets/logo/logo.svg"/>
+    <link rel="stylesheet" type="text/css" href="../style.css">
 
     <!--libraries-->
     <script src="../libraries/p5.js"></script>
@@ -12,13 +13,22 @@
 
     <!--js-->
     
-    <link rel="stylesheet" type="text/css" href="../style.css">
     <meta charset="utf-8">
 
   </head>
   <body>
       <script src="gameFinished.js"></script>
-  
+
+      <div class="buttoncontainer">
+        <div class="leftbuttons"></div>
+        <div class="rightbuttons">
+          <div class="gamebutton" id="backToGameBtn" onclick="location = origin">
+            <h1>
+              Play the game again
+            </h1>
+          </div>
+        </div>
+      </div>
 
 </body>
 </html>

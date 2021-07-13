@@ -1,16 +1,19 @@
 class Tree
 {
-    constructor(x, y, width, height, image)
+    constructor(x, y, width, height)
     {
         allTrees.push(this);
         
         this.width = width;
         this.height = height;
 
-        this.image = image;
+        this.image = base.assets.trees[
+            Math.round(random(0, base.assets.trees.length-1))
+        ];
         
         this.sprite = createSprite(x, y - (height/2), this.width, this.height);
         this.sprite.shapeColor = rgb(114, 92, 66);
+        this.sprite.visible = false;
         this.leaves = this.generateLeafCircle(height/2, 200, 1.2, 1);
         this.sprite.depth = 1;
         
@@ -63,9 +66,12 @@ class Tree
 
     swayLeaves()
     {
-        for (var p in this.leaves)
+        if (buttonStuff.settings.dynamicTrees)
         {
-            this.leaves[p].sway();
+            for (var p in this.leaves)
+            {
+                this.leaves[p].sway();
+            }
         }
     }
 
@@ -86,6 +92,26 @@ class Tree
                 );
             }
             this.break();
+        }
+    }
+
+    display()
+    {
+        if (this.broken)
+        {
+            return;
+        }
+        if (buttonStuff.settings.textures)
+        {
+            this.sprite.visible = false;
+            push();
+            imageMode(CENTER)
+            image(this.image, this.sprite.x, this.sprite.y, this.sprite.width, this.sprite.height);
+            pop();
+        }
+        else
+        {
+            this.sprite.visible = true;
         }
     }
 

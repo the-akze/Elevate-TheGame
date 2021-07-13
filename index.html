@@ -13,6 +13,7 @@
     <script src="libraries/matter.js"></script>
 
     <!--js-->
+    <script src="buttonFuncs.js"></script>
     <script src="base.js"></script>
     <script src="js/baseClass.js"></script>
     <script src="js/gameMessage.js"></script>
@@ -41,7 +42,50 @@
   </head>
   <body>
       <script src="sketch.js"></script>
-  
+      
+      <div class="buttoncontainer">
+        <div class="leftbuttons">
+          <div class="gamebutton" id="pauseBtn" onclick="buttonStuff.togglePause();"></div>
+        </div>
+        <div class="rightbuttons">
+          <div class="gamebutton" id="inventoryBtn" onclick="
+          if (!player.playing) { return; }
+          if (player.viewInventory) { paused = false; }
+          player.viewInventory = !player.viewInventory;
+          "></div>
+          <h1 id="fpsText" style="position: fixed; margin-left: -100px;">
+            FPS
+          </h1>
+        </div>
+      </div>
+
+      <div class="pausemenu" id="pausemenu">
+        <h1>
+          Paused
+        </h1>
+        <button onclick="buttonStuff.setPaused(false);">
+          Back to the game
+        </button>
+        <button onclick="screenshotInNewTab();">
+          Screenshot (opens in new tab)
+        </button>
+        <h1>
+          <br/>
+          Settings...
+        </h1>
+        <button onclick="buttonStuff.updateSettings({textures: !buttonStuff.settings.textures});" id="texturesSetting">
+          Textures
+        </button>
+        <!-- <button onclick="buttonStuff.updateSettings({help: !buttonStuff.settings.help});" id="helpSetting">
+          Help
+        </button> -->
+        <button onclick="buttonStuff.updateSettings({dynamicTrees: !buttonStuff.settings.dynamicTrees});" id="dynamicTreesSetting">
+          Dynamic Trees
+        </button>
+        <button onclick="buttonStuff.updateSettings({dynamicWater: !buttonStuff.settings.dynamicWater});" id="dynamicWaterSetting">
+          Dynamic Water
+        </button>
+      </div>
 
 </body>
 </html>

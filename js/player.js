@@ -23,7 +23,7 @@ class Player extends BaseClass
         this.stats.health = 80;
         this.stats.air = 100;
 
-        var handSprite = createSprite(x, y, 20, 20);
+        var handSprite = createSprite(x, y, 10, 10);
         handSprite.shapeColor = color;
         this.mining = {}
         this.mining.handSprite = handSprite;
@@ -48,7 +48,7 @@ class Player extends BaseClass
         var magnitude = (base.mathStuff.magnitude(x, y));
         if (isPlayerMovement)
         {
-            if (this.stats.health < 5 || this.stats.stamina < 1)
+            if (this.stats.stamina < 1)
             {
                 return;
             }
@@ -216,7 +216,7 @@ class Player extends BaseClass
         var handOffset = base.mathStuff.normalize(mouseXOffset, mouseYOffset, 80);
         
         var mineAnimationOffset = Math.sin(frameCount / 2) / 4;
-        var animatedOffset = base.mathStuff.normalize(mouseXOffset, mouseYOffset, 80 * (1 + (this.mining.isMining * mineAnimationOffset)));
+        var animatedOffset = base.mathStuff.normalize(mouseXOffset, mouseYOffset, 50 * (1 + (this.mining.isMining * mineAnimationOffset)));
         
         fill("blue");
         noStroke();
@@ -310,10 +310,10 @@ class Player extends BaseClass
         var uiSizeMultiplier = 2;
         
         push();
-        textSize(30*uiSizeMultiplier / (lerpZoom/0.6));
+        textSize(30*uiSizeMultiplier / (zoom/0.6));
         fill("white");
         stroke("black");
-        strokeWeight(3*uiSizeMultiplier / (lerpZoom/0.6));
+        strokeWeight(3*uiSizeMultiplier / (zoom/0.6));
 
         //show items the player has
         if (!this.viewInventory)
@@ -330,30 +330,30 @@ class Player extends BaseClass
         if (windowHeight / windowWidth >= 1220/1000)
         {
             push();
-            translate(this.sprite.x, this.sprite.y - (this.sprite.height*2*uiSizeMultiplier) / (lerpZoom/0.6));
+            translate(this.sprite.x, this.sprite.y - (this.sprite.height*2*uiSizeMultiplier) / (zoom/0.6));
             textAlign(CENTER);
-            textSize(20*uiSizeMultiplier / (lerpZoom/0.6));
+            textSize(20*uiSizeMultiplier / (zoom/0.6));
             text("Your screen might\nbe too tall or\ntoo thin to see\nthe inventory!", 0, 0);
             pop();
             
         }
 
         
-        translate(this.sprite.x - (this.sprite.width*6*uiSizeMultiplier) / (lerpZoom/0.6), this.sprite.y + (this.sprite.height*uiSizeMultiplier) / (lerpZoom/0.6));
-        var yOffset = -70*uiSizeMultiplier / (lerpZoom/0.6);
+        translate(this.sprite.x - (this.sprite.width*6*uiSizeMultiplier) / (zoom/0.6), this.sprite.y + (this.sprite.height*uiSizeMultiplier) / (zoom/0.6));
+        var yOffset = -70*uiSizeMultiplier / (zoom/0.6);
         for (var i in this.inventory.content.materials)
         {
-            yOffset += 35*uiSizeMultiplier / (lerpZoom/0.6);
+            yOffset += 35*uiSizeMultiplier / (zoom/0.6);
             push();
             textAlign(RIGHT);
             text(i, 0, yOffset);
-            translate(this.sprite.width*uiSizeMultiplier / (lerpZoom/0.6), 0);
+            translate(this.sprite.width*uiSizeMultiplier / (zoom/0.6), 0);
             textAlign(LEFT);
             text(this.inventory.content.materials[i], 0, yOffset);
             pop();
         }
-        text("MATERIALS", 0, -100*uiSizeMultiplier / (lerpZoom/0.6));
-        if (yOffset == 0)
+        text("MATERIALS", 0, -100*uiSizeMultiplier / (zoom/0.6));
+        if (yOffset == -70*uiSizeMultiplier / (zoom/0.6))
         {
             textAlign(LEFT);
             text("No materials", 0, 0);
@@ -361,25 +361,25 @@ class Player extends BaseClass
         pop();
 
         //show crafting options
-        translate(this.sprite.x + (this.sprite.width*4*uiSizeMultiplier) / (lerpZoom/0.6), this.sprite.y - (this.sprite.height*2*uiSizeMultiplier) / (lerpZoom/0.6));
+        translate(this.sprite.x + (this.sprite.width*4*uiSizeMultiplier) / (zoom/0.6), this.sprite.y - (this.sprite.height*2*uiSizeMultiplier) / (zoom/0.6));
         textAlign(LEFT);
-        textSize(20*uiSizeMultiplier / (lerpZoom/0.6));
-        strokeWeight(2*uiSizeMultiplier / (lerpZoom/0.6));
+        textSize(20*uiSizeMultiplier / (zoom/0.6));
+        strokeWeight(2*uiSizeMultiplier / (zoom/0.6));
         yOffset = 0;
         var k = 1;
         for (var i in Inventory.costs())
         {
-            yOffset += 24*uiSizeMultiplier / (lerpZoom/0.6);
+            yOffset += 24*uiSizeMultiplier / (zoom/0.6);
             text("[" + k + "] - " + i + " costs", 0, yOffset);
             for (var t in Inventory.costs()[i])
             {
-                yOffset += 24*uiSizeMultiplier / (lerpZoom/0.6);
-                text(Inventory.costs()[i][t] + " " + t, 50 / (lerpZoom/0.6), yOffset);
+                yOffset += 24*uiSizeMultiplier / (zoom/0.6);
+                text(Inventory.costs()[i][t] + " " + t, 50 / (zoom/0.6), yOffset);
             }
-            yOffset += 8*uiSizeMultiplier / (lerpZoom/0.6);
+            yOffset += 8*uiSizeMultiplier / (zoom/0.6);
             k++;
         }
-        text("CRAFTING", 0, -28*uiSizeMultiplier / (lerpZoom/0.6));
+        text("CRAFTING", 0, -28*uiSizeMultiplier / (zoom/0.6));
 
         pop();
     }

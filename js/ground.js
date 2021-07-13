@@ -2,16 +2,19 @@ class Ground extends BaseClass
 {
     constructor(x, y, width, height, color, image, minableMaterial)
     {
-        super(x, y, width, height, color, image);
+        super(x, y, width, height, color, image, true);
         Matter.Body.setStatic(this.body, true);
         this.body.label = "Ground";
         allGrounds.push(this);
-        for (var i = allBodyItems.length - 1; i >= 0; i++)
+        if (!this.image)
         {
-            if (allBodyItems[i] == this)
+            for (var i = allBodyItems.length - 1; i >= 0; i++)
             {
-                allBodyItems.splice(i, 1);
-                break;
+                if (allBodyItems[i] == this)
+                {
+                    allBodyItems.splice(i, 1);
+                    break;
+                }
             }
         }
 

@@ -1,11 +1,10 @@
 class BaseClass
 {
-    constructor(x, y, width, height, color, image)
+    constructor(x, y, width, height, color, image, isGround)
     {
         if ((y + (height/2) + 1000) > voidY)
         {
             voidY = y + (height/2) + 1000;
-
         }
         allBodyItems.push(this);
         var bodyOptions=
@@ -35,22 +34,53 @@ class BaseClass
         if (image)
         {
             this.image = (((typeof image) == "string") ? loadImage(image) : image);
+            // this.sprite.addAnimation("img", this.image);
             this.sprite.visible = false;
         }
+
+        this.isGround = isGround;
     }
 
     display()
     {
         if (this.image)
         {
-
-            var angle = this.sprite.rotation;
-            push();
-            translate(this.body.position.x, this.body.position.y);
-            rotate(angle);
-            imageMode(CENTER);
-            image(this.image, 0, 0, this.width, this.height);
-            pop();
+            if (this.isGround)
+            {
+                if (buttonStuff.settings.textures)
+                {
+                    this.sprite.visible = false;
+                    push()
+                    imageMode(CORNER)
+                    var sizeX = 50;
+                    var sizeY = 50;
+                    for (var x = this.initialX - (this.width/2); x < this.initialX + (this.width/2); x += sizeX)
+                    {
+                        for (var y = this.initialY - (this.height/2); y < this.initialY + (this.height/2); y += sizeY)
+                        {
+                            if (dist(player.sprite.x, player.sprite.y, x, y) < 1500)
+                            {
+                                image(this.image, x, y, sizeX, sizeY);
+                            }
+                        }
+                    }
+                    pop();
+                }
+                else
+                {
+                    this.sprite.visible = true;
+                }
+            }
+            else
+            {
+                var angle = this.sprite.rotation;
+                push();
+                translate(this.body.position.x, this.body.position.y);
+                rotate(angle);
+                imageMode(CENTER);
+                image(this.image, 0, 0, this.width, this.height);
+                pop();
+            }
         }
 
         this.sprite.x = this.body.position.x;
