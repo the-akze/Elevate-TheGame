@@ -1,3 +1,7 @@
+const WALKING_PLAYER = 0;
+const IDLE_PLAYER = 1;
+
+
 class Player extends BaseClass
 {
     constructor(x, y, width, height, playerInfo, color, image)
@@ -25,7 +29,10 @@ class Player extends BaseClass
 
         var handSprite = createSprite(x, y, 10, 10);
         handSprite.shapeColor = color;
-        this.mining = {}
+        this.mining = {
+            isMining: false,
+            what: null
+        };
         this.mining.handSprite = handSprite;
         this.mining.clubAssets = base.assets.tools;
         var miningHitbox = createSprite(x, y, 200, 20);
@@ -41,7 +48,51 @@ class Player extends BaseClass
         this.rope.disable();
 
         this.playing = true;
+
+        let w = base.assets.player.walking;
+        this.animation = {
+            images: {
+                idle: base.assets.player.idle,
+                walking: base.assets.player.walking
+            },
+            state: WALKING_PLAYER
+        }
     }
+
+    updateAnimationState()
+    {
+        if (keyDown("a") || keyDown("d") || keyDown("left") || keyDown("right"))
+        {
+            this.animation.state
+        }
+    }
+
+    // display()
+    // {
+    //     var currentImg;
+
+    //     if (this.animation.state === WALKING_PLAYER)
+    //     {
+    //         currentImg = this.animation.images.walking[Math.round(frameCount / 5) % 4];
+    //     }
+    //     else
+    //     {
+    //         currentImg = this.animation.images.idle[0];
+    //     }
+        
+
+    //     var angle = this.sprite.rotation;
+    //     push();
+    //     translate(this.body.position.x, this.body.position.y);
+    //     rotate(angle);
+    //     imageMode(CENTER);
+    //     image(currentImg, 0, 0, this.width, this.height);
+    //     pop();
+
+    //     this.sprite.x = this.body.position.x;
+    //     this.sprite.y = this.body.position.y;
+    //     this.sprite.rotation = 180*this.body.angle/PI;
+    // }
 
     addForce(x, y, isPlayerMovement)
     {
@@ -397,6 +448,20 @@ class Player extends BaseClass
         }
         return false;
     }
+
+    doSounds()
+    {
+        if (this.mining.isMining)
+        {
+            if (frameCount % 12 == 0)
+            {
+                if (base.assets.audio.soundEffects[this.mining.what.mining.material + "Hit"])
+                {
+                    base.assets.audio.soundEffects[this.mining.what.mining.material + "Hit"].play();
+                }
+            }
+        }
+    }
     
     //play, what it does each frame supposedly
     play()
@@ -511,6 +576,7 @@ class Player extends BaseClass
             this.mining.isMining = false;
             this.mining.what = null;
         }
+        this.doSounds();
 
         var onnedRope = false;
         if (keyWentDown("r") || keyWentDown("c"))

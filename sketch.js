@@ -33,8 +33,18 @@ function preload()
   {
     player:
     {
-      idle: [
+      idle:
+      [
         loadImage("assets/player/idle.svg")
+      ],
+      walking:
+      [
+        loadImage("assets/player/walk1.svg"),
+        loadImage("assets/player/walk2.svg"),
+        loadImage("assets/player/walk3.svg"),
+        loadImage("assets/player/walk4.svg"),
+        loadImage("assets/player/walk5.svg"),
+        loadImage("assets/player/walk6.svg"),
       ]
     },
     // svgs:
@@ -78,7 +88,17 @@ function preload()
     [
       loadImage("assets/rocket/rocketShip.png"),
       loadImage("assets/rocket/rocketFly.png")
-    ]
+    ],
+
+    audio:
+    {
+      soundEffects:
+      {
+        woodHit: loadSound("assets/audio/soundEffects/woodHit.ogg"),
+        stoneHit: loadSound("assets/audio/soundEffects/stoneHit.ogg"),
+        ironHit: loadSound("assets/audio/soundEffects/ironHit.ogg"),
+      }
+    }
   };
 }
 
@@ -143,7 +163,6 @@ function setup()
     y += 35;
     // layers["mineDiamond" + its] = new Diamond(-6400 - offset, y, 50, 10000);
     layers["mineDiamond" + (its+1)] = new Diamond(-6400 + offset, y, 50, 10000);
-    console.log(offset-6400);
     its += 2;
     offset -= 49
   }
