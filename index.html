@@ -1,91 +1,34 @@
 <!DOCTYPE html>
-<html>
-  <head>
-
+<head>
+    <link rel="icon" href="assets/logo/logo.svg">
     <title>Elevate - The Game</title>
-    <link rel="icon" href="assets/logo/logo.svg"/>
 
-    <!--libraries-->
-    <script src="libraries/p5.js"></script>
-    <script src="libraries/p5.dom.min.js"></script>
-    <script src="libraries/p5.sound.min.js"></script>
-    <script src="libraries/p5.play.js"></script>
-    <script src="libraries/matter.js"></script>
-
-    <!--js-->
-    <script src="buttonFuncs.js"></script>
-    <script src="base.js"></script>
-    <script src="js/baseClass.js"></script>
-    <script src="js/gameMessage.js"></script>
-    <script src="js/inventory.js"></script>
-    <script src="js/ground.js"></script>
-    <script src="js/minableGrounds/stone.js"></script>
-    <script src="js/minableGrounds/iron.js"></script>
-    <script src="js/minableGrounds/coal.js"></script>
-    <script src="js/minableGrounds/copper.js"></script>
-    <script src="js/minableGrounds/diamond.js"></script>
-    <script src="js/minableGrounds/grapheneWall.js"></script>
-    <script src="js/rope.js"></script>
-    <script src="js/ropable.js"></script>
-    <script src="js/rocket.js"></script>
-    <script src="js/player.js"></script>
-    <script src="js/mountainPart.js"></script>
-    <script src="js/mountain.js"></script>
-    <script src="js/particle.js"></script>
-    <script src="js/tree.js"></script>
-    <script src="js/waterBody.js"></script>
-    <script src="js/cotton.js"></script>
-    
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="infoPageStyle.css">
     <meta charset="utf-8">
-
-  </head>
-  <body>
-      <script src="sketch.js"></script>
-      
-      <div class="buttoncontainer">
-        <div class="leftbuttons">
-          <div class="gamebutton" id="pauseBtn" onclick="buttonStuff.togglePause();"></div>
-        </div>
-        <div class="rightbuttons">
-          <div class="gamebutton" id="inventoryBtn" onclick="
-          if (!player.playing) { return; }
-          if (player.viewInventory) { paused = false; }
-          player.viewInventory = !player.viewInventory;
-          "></div>
-          <h1 id="fpsText" style="position: fixed; margin-left: -100px;">
-            FPS
-          </h1>
-        </div>
-      </div>
-
-      <div class="pausemenu" id="pausemenu">
-        <h1>
-          Paused
+</head>
+<body>
+    <div class="titlecontainer">
+        <h1 class="bigtitle">
+            Elevate
         </h1>
-        <button onclick="buttonStuff.setPaused(false);">
-          Back to the game
-        </button>
-        <button onclick="screenshotInNewTab();">
-          Screenshot (opens in new tab)
-        </button>
-        <h1>
-          <br/>
-          Settings...
-        </h1>
-        <button onclick="buttonStuff.updateSettings({textures: !buttonStuff.settings.textures});" id="texturesSetting">
-          Textures
-        </button>
-        <!-- <button onclick="buttonStuff.updateSettings({help: !buttonStuff.settings.help});" id="helpSetting">
-          Help
-        </button> -->
-        <button onclick="buttonStuff.updateSettings({dynamicTrees: !buttonStuff.settings.dynamicTrees});" id="dynamicTreesSetting">
-          Dynamic Trees
-        </button>
-        <button onclick="buttonStuff.updateSettings({dynamicWater: !buttonStuff.settings.dynamicWater});" id="dynamicWaterSetting">
-          Dynamic Water
-        </button>
-      </div>
+        <h2 class="subtitle">
+            The Game
+        </h2>
+    </div>
 
+    <div class="btncontainer">
+        <div class="btnwrapper">
+            <button class="btn" id="playbtn" onclick="location = 'play.html'">
+                Play
+            </button>
+        </div>
+
+        <div class="btnwrapper">
+            <button class="btn" id="aboutbtn" onclick="location = 'about.html'">
+                About
+            </button>
+        </div>
+    </div>
+
+    <div class="greendesign"></div>
 </body>
-</html>

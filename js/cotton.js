@@ -2,11 +2,12 @@ class Cotton
 {
     constructor(x, y)
     {
-        var sizeMulti = random(0.6, 1.6);
-        this.sprite = createSprite(x, y - 60*sizeMulti);
-        this.sprite.addImage("cotton", base.assets.nature.cotton[Math.round(random(0, 2))]);
-        this.sprite.scale = 2*sizeMulti/15;
-
+        var sizeMulti = 2*random(2, 3)/15;
+        let img = base.assets.nature.cotton[Math.round(random(0, base.assets.nature.cotton.length-1))];
+        this.sprite = createSprite(x, y - (img.height/2)*sizeMulti);
+        this.sprite.addImage("cotton", img);
+        this.sprite.scale = sizeMulti;
+        // this.sprite.debug = true;
         
         allCotton.push(this);
     }

@@ -1,12 +1,4 @@
-if (document.location.host == "ayy-akshat.github.io")
-{
-  if (document.referrer != "https://ayy-akshat.github.io/Elevate-TheGame/")
-  {
-    window.location.replace("..");
-  }
-}
-
-var rocketImg, youWonImg;
+var rocketImg;
 
 var w;
 var h;
@@ -21,7 +13,6 @@ function setup()
   h = windowHeight;
   
   rocketImg = loadImage("rocket.png");
-  youWonImg = loadImage("youWon.png");
 }
 
 function draw()

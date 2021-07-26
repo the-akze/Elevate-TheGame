@@ -35,16 +35,22 @@ function preload()
     {
       idle:
       [
-        loadImage("assets/player/idle.svg")
+        loadImage("assets/player/pi1.png")
       ],
       walking:
       [
-        loadImage("assets/player/walk1.svg"),
-        loadImage("assets/player/walk2.svg"),
-        loadImage("assets/player/walk3.svg"),
-        loadImage("assets/player/walk4.svg"),
-        loadImage("assets/player/walk5.svg"),
-        loadImage("assets/player/walk6.svg"),
+        loadImage("assets/player/pw1.png"),
+        loadImage("assets/player/pw2.png"),
+        loadImage("assets/player/pw3.png"),
+        loadImage("assets/player/pw4.png"),
+        loadImage("assets/player/pw5.png"),
+        loadImage("assets/player/pw6.png"),
+      ],
+      punch:
+      [
+        // loadImage("assets/player/swing1.png"),
+        loadImage("assets/player/swing2.png"),
+        loadImage("assets/player/swing3.png"),
       ]
     },
     // svgs:
@@ -65,7 +71,20 @@ function preload()
       [
         loadImage("assets/nature/cotton/cotton1.png"),
         loadImage("assets/nature/cotton/cotton2.png"),
-        loadImage("assets/nature/cotton/cotton3.png")
+        loadImage("assets/nature/cotton/cotton3.png"),
+        loadImage("assets/nature/cotton/cotton4.png"),
+        loadImage("assets/nature/cotton/cotton5.png"),
+      ],
+      sky:
+      [
+        // loadImage("assets/nature/sky/sky.jpg")
+        loadImage("assets/nature/sky/sky.png")
+      ],
+      trees:
+      [
+        loadImage("assets/nature/trees/tree1.png"),
+        loadImage("assets/nature/trees/tree2.png"),
+        loadImage("assets/nature/trees/tree3.png"),
       ]
     },
     textures:
@@ -75,7 +94,7 @@ function preload()
       loadImage("assets/textures/stone.png"),
       loadImage("assets/textures/diamond.png"),
       loadImage("assets/textures/iron.png"),
-      loadImage("assets/textures/coal.png")
+      loadImage("assets/textures/coal.png"),
     ],
     trees:
     [
@@ -89,6 +108,16 @@ function preload()
       loadImage("assets/rocket/rocketShip.png"),
       loadImage("assets/rocket/rocketFly.png")
     ],
+    materialIcons:
+    {
+      stone: loadImage("assets/materialIcons/stone.png"),
+      iron: loadImage("assets/materialIcons/iron.png"),
+      coal: loadImage("assets/materialIcons/coal.png"),
+      // copper: loadImage("assets/materialIcons/copper.png"),
+      diamond: loadImage("assets/materialIcons/diamond.png"),
+      cotton: loadImage("assets/materialIcons/cotton.png"),
+      wood: loadImage("assets/materialIcons/wood.png"),
+    },
 
     audio:
     {
@@ -97,6 +126,7 @@ function preload()
         woodHit: loadSound("assets/audio/soundEffects/woodHit.ogg"),
         stoneHit: loadSound("assets/audio/soundEffects/stoneHit.ogg"),
         ironHit: loadSound("assets/audio/soundEffects/ironHit.ogg"),
+        copperHit: loadSound("assets/audio/soundEffects/copperHit.ogg"),
       }
     }
   };
@@ -105,6 +135,21 @@ function preload()
 function setup()
 {
   buttonStuff.updateSettingElements();
+  buttonStuff.tutorial.update();
+
+  for (var i in Inventory.allMaterials())
+  {
+    var e = document.getElementById(Inventory.allMaterials()[i] + "icon");
+    if (e)
+    {
+      e.style.backgroundImage = "url('assets/materialIcons/" + Inventory.allMaterials()[i] + ".png')";
+    }
+    var l = document.getElementById(Inventory.allMaterials()[i] + "amt");
+    if (l)
+    {
+      l.innerHTML = Inventory.allMaterials()[i];
+    }
+  }
 
   checkToResizeCanvas();
 
@@ -123,7 +168,7 @@ function setup()
   layers.landLeft2 = new Ground(-8900, 900, 2000, 400, "green", base.assets.textures[1]);
   layers.stoneLeft1 = new Stone(-3400, 3100, 3000, 4000);
   layers.stoneLeft2 = new Stone(-8900, 3100, 2000, 4000);
-  layers.mineMidLand = new Ground(-6400, 750, 2500, 100, "green", base.assets.textures[1]);
+  layers.mineMidLand = new Ground(-6400, 700, 2500, 50, "green", base.assets.textures[1]);
   
   var its = 1;
   var y = 5700;
@@ -173,7 +218,8 @@ function setup()
     jumpStrength: -50
   }
   //the one and only player character
-  player = new Player(1000, 500, 40, 70, playerInfo, "blue", base.assets.player.idle[0]);
+  player = new Player(1000, 500, 40*1.6, 70*1.6, playerInfo, "blue", base.assets.player.idle[0]);
+  // player = new Player(-5200, 400, 40*2, 70*2, playerInfo, "blue", base.assets.player.idle[0]);
 
   //that big mountain to the right
   mountain = new Mountain("gray", 300, 5);
@@ -195,14 +241,11 @@ function setup()
 
   for (var i = -5200; i >= -7500; i -= random(20, 40))
   {
-    cottons.push(new Cotton(i, 700));
+    cottons.push(new Cotton(i, 675));
   }
 
   new Ropable(300, -100);
   new Ropable(-4800, 500)
-
-  //Message at the beginning
-  new GameMessage("WASD/Arrows to move, space to mine.\nE to view inventory and use the\ncorresponding number to craft\nsomething.\nUse your resources to get to the top of\nthe mountain and fly away in the rocket!\n\n[TIP: If your game is running slow,\ntry clicking the settings button\n in the top left and experimenting\nwith the settings.]", [200, 200, 200], [50, 50, 50], 600);
 }
 
 function draw()
@@ -220,8 +263,10 @@ function draw()
     Engine.update(engine);
   }
 
-  var cd = base.mathStuff.clamp(darkness, 1, 10);
-  background(135/cd, 206/cd, 235/cd);
+  // var cd = base.mathStuff.clamp(darkness, 1, 10);
+  // background(135/cd, 206/cd, 235/cd);
+
+  background(base.assets.nature.sky[0]);
 
   camera.zoom = zoom*height/900;
   
@@ -376,3 +421,25 @@ function screenshotInNewTab()
   </h1>
   `);
 }
+
+/* TODO
+
+- IN-GAME:
+
+  - Shorten words of tutorial.
+  - Change grass image.
+  - Show materials on screen.
+    - Change inventory UI.
+  - fps setting
+  - Fix memory bug
+  - Rope hook
+  - person swimming animation
+  - tool in hand
+  - better bg
+  - 
+
+- Home page:
+  - 
+
+
+*/

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+  <head>
+
+    <title>Elevate - The Game</title>
+    <link rel="icon" href="assets/logo/logo.svg"/>
+
+    <!--libraries-->
+    <script src="libraries/p5.js"></script>
+    <script src="libraries/p5.dom.min.js"></script>
+    <script src="libraries/p5.sound.min.js"></script>
+    <script src="libraries/p5.play.js"></script>
+    <script src="libraries/matter.js"></script>
+
+    <!--js-->
+    <script src="buttonFuncs.js"></script>
+    <script src="base.js"></script>
+    <script src="js/baseClass.js"></script>
+    <script src="js/gameMessage.js"></script>
+    <script src="js/inventory.js"></script>
+    <script src="js/ground.js"></script>
+    <script src="js/minableGrounds/stone.js"></script>
+    <script src="js/minableGrounds/iron.js"></script>
+    <script src="js/minableGrounds/coal.js"></script>
+    <script src="js/minableGrounds/copper.js"></script>
+    <script src="js/minableGrounds/diamond.js"></script>
+    <script src="js/minableGrounds/grapheneWall.js"></script>
+    <script src="js/rope.js"></script>
+    <script src="js/ropable.js"></script>
+    <script src="js/rocket.js"></script>
+    <script src="js/player.js"></script>
+    <script src="js/mountainPart.js"></script>
+    <script src="js/mountain.js"></script>
+    <script src="js/particle.js"></script>
+    <script src="js/tree.js"></script>
+    <script src="js/waterBody.js"></script>
+    <script src="js/cotton.js"></script>
+    
+    <link rel="stylesheet" type="text/css" href="gamePageStyle.css">
+    <meta charset="utf-8">
+
+  </head>
+  <body>
+      <script src="sketch.js"></script>
+      
+      <div class="buttoncontainer">
+        <div class="leftbuttons">
+          <div class="gamebutton" id="pauseBtn" onclick="buttonStuff.togglePause();"></div>
+        </div>
+        <div class="rightbuttons">
+          <div class="gamebutton" id="inventoryBtn" onclick="
+          if (!player.playing) { return; }
+          if (player.viewInventory) { paused = false; }
+          player.viewInventory = !player.viewInventory;
+          "></div>
+          <h1 id="fpsText" style="position: fixed; margin-left: -100px;">
+            FPS
+          </h1>
+        </div>
+      </div>
+
+      <div class="pausemenu" id="pausemenu">
+        <h1>
+          Paused
+        </h1>
+        <button onclick="buttonStuff.setPaused(false);">
+          Back to the game
+        </button>
+        <button onclick="screenshotInNewTab();">
+          Screenshot (opens in new tab)
+        </button>
+        <button onclick="location = '.';">
+          Back to start page
+        </button>
+        <h1>
+          <br/>
+          Settings...
+        </h1>
+
+        <button onclick="buttonStuff.updateSettings({textures: !buttonStuff.settings.textures});" id="texturesSetting">
+          Textures
+        </button>
+
+        <button onclick="buttonStuff.updateSettings({help: !buttonStuff.settings.help});" id="helpSetting">
+          Help
+        </button>
+
+        <button onclick="buttonStuff.updateSettings({dynamicWater: !buttonStuff.settings.dynamicWater});" id="dynamicWaterSetting">
+          Dynamic Water
+        </button>
+        
+        <button onclick="buttonStuff.updateSettings({soundEffects: !buttonStuff.settings.soundEffects});" id="soundEffectsSetting">
+          Sound Effects
+        </button>
+        
+      </div>
+
+      <div class="tutorial" id="tutorial">
+        <h1 id="tutorialtitle">
+          Tutorial
+        </h1>
+        <h3 id="tutorialtxt">
+          Welcome to the game, Elevate.
+        </h3>
+        <button onclick="buttonStuff.tutorial.changePageBy(1);">
+          NEXT
+        </button>
+        <button onclick="buttonStuff.tutorial.changePageBy(-1);">
+          PREVIOUS
+        </button>
+      </div>
+
+      <!-- <div class="inventory" id="inventory">
+        
+        <div class="inventoryitem" id="wood">
+          <div class="inventoryicon" id="woodicon"></div>
+          <h4 id="woodamt"></h4>
+        </div>
+        
+        <div class="inventoryitem" id="stone">
+          <div class="inventoryicon" id="stoneicon"></div>
+          <h4 id="stoneamt"></h4>
+        </div>
+        
+        <div class="inventoryitem" id="iron">
+          <div class="inventoryicon" id="ironicon"></div>
+          <h4 id="ironamt"></h4>
+        </div>
+        
+        <div class="inventoryitem" id="copper">
+          <div class="inventoryicon" id="coppericon"></div>
+          <h4 id="copperamt"></h4>
+        </div>
+        
+        <div class="inventoryitem" id="bronze">
+          <div class="inventoryicon" id="bronzeicon"></div>
+          <h4 id="bronzeamt"></h4>
+        </div>
+        
+        <div class="inventoryitem" id="diamond">
+          <div class="inventoryicon" id="diamondicon"></div>
+          <h4 id="diamondamt"></h4>
+        </div>
+        
+        <div class="inventoryitem" id="coal">
+          <div class="inventoryicon" id="coalicon"></div>
+          <h4 id="coalamt"></h4>
+        </div>
+        
+        <div class="inventoryitem" id="cotton">
+          <div class="inventoryicon" id="cottonicon"></div>
+          <h4 id="cottonamt"></h4>
+        </div>
+        
+        <div class="inventoryitem" id="graphene">
+          <div class="inventoryicon" id="grapheneicon"></div>
+          <h4 id="grapheneamt"></h4>
+        </div>
+        
+      </div> -->
+
+</body>
+</html>

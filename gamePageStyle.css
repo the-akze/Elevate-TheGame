@@ -75,7 +75,7 @@ canvas {
   transition: 1s;
 }
 
-.pausemenu button {
+.pausemenu button, .tutorial button {
   width: 80%;
   background-color:rgba(0, 0, 0, 0.5);
   border: 0;
@@ -105,4 +105,58 @@ button {
   top: 50%;
   transform: translateY(-50%);
   color: lightgray;
+}
+
+.tutorial {
+  position: fixed;
+  display: block;
+  right: 5%;
+  bottom: 5%;
+  width: 45vw;
+  max-height: 40vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9;
+  color: white;
+  text-align: center;
+  backdrop-filter: blur(2px);
+  overflow: auto;
+  padding-left: 20;
+  padding-right: 20;
+}
+
+.inventory {
+  position: fixed;
+  display: block;
+  margin: 5px;
+  top: 7%;
+  z-index: 5;
+  padding: 20px;
+}
+
+.inventoryitem {
+  display: flex;
+  /* border: solid 1px; */
+  /* background-color: rgba(0, 0, 0, 0.5); */
+  border-bottom-right-radius: 10px;
+  border-top-right-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.inventoryicon {
+  width: 20px;
+  height: 20px;
+  background-size: contain;
+  border-radius: 20px;
+  /* position: relative; */
+  /* display: block; */
+  /* top: 50%; */
+  /* margin-top: auto; */
+  /* border: solid 1px; */
+}
+
+.inventoryitem h4 {
+  /* border: solid 1px; */
+  margin-top: auto;
+  margin-left: 20px;
+  color: black;
 }

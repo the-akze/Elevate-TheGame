@@ -23,6 +23,8 @@ class Inventory
                 this.add("misc", i, items[i]);
             }
         }
+
+        
     }
 
     add(classification, item, count, hideMessage)
@@ -30,7 +32,8 @@ class Inventory
         if (!hideMessage)
         {
             var nc = this.content[classification][item] + count;
-            new GameMessage("+" + count + " " + item + ((((nc % 3) == 0) || ((nc % 5) == 0)) && (item != "cotton") ? "\n('E' to see materials and crafting)" : ""), [35, 186, 113], [10, 161, 88], 60);
+            // new GameMessage("+" + count + " " + item + ((((nc % 3) == 0) || ((nc % 5) == 0)) && (item != "cotton") ? "\n('E' to see materials and crafting)" : ""), [35, 186, 113], [10, 161, 88], 60, base.assets.materialIcons[item], 30, 30);
+            new GameMessage("", undefined, undefined, undefined, base.assets.materialIcons[item], 30, 30);
         }
         if (this.content[classification][item])
         {
@@ -150,6 +153,13 @@ class Inventory
         };
     }
 
+    static allMaterials()
+    {
+        return [
+            'wood', 'stone', 'iron', 'copper', 'bronze', 'diamond', 'coal', 'cotton', 'graphene'
+        ];
+    }
+
     static clubLevels()
     {
         return ["woodClub", "stoneClub", "ironClub", "bronzeClub", "diamondClub"];
@@ -183,12 +193,12 @@ class Inventory
     static materialBreaks()
     {
         return {
-            hand: ["wood"],
-            wood: ["wood", "stone"],
-            stone: ["wood", "stone", "iron", "coal"],
-            iron: ["wood", "stone", "iron", "copper", "coal"],
-            bronze: ["wood", "stone", "iron", "diamond", "coal"],
-            diamond: ["wood", "stone", "iron", "diamond", "coal", "graphene"]
+            hand:       ["wood"],
+            wood:       ["wood", "stone"],
+            stone:      ["wood", "stone", "iron", "coal"],
+            iron:       ["wood", "stone", "iron", "copper", "coal"],
+            bronze:     ["wood", "stone", "iron", "copper", "diamond", "coal"],
+            diamond:    ["wood", "stone", "iron", "copper", "diamond", "coal", "graphene"]
         }
     }
 

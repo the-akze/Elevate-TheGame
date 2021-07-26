@@ -40,7 +40,7 @@ base.renderStuff.displayBody = (body, color) =>
     pop();
 }
 
-base.renderStuff.progressBar = (x1, y1, x2, y2, barColor, bgColor, value) =>
+base.renderStuff.progressBar = (x1, y1, x2, y2, barColor, bgColor, value, txt, textColor) =>
 {
     push();
     noStroke();
@@ -49,6 +49,15 @@ base.renderStuff.progressBar = (x1, y1, x2, y2, barColor, bgColor, value) =>
     rect(x1, y1, x2, y2);
     fill(barColor);
     rect(x1, y1, lerp(x1, x2, value), y2);
+
+    if (txt)
+    {
+        fill(textColor);
+        textAlign(CENTER);
+        textSize(12);
+        text(txt, (x1 + x2)/2, (y1 + y2)/2 + 4);
+    }
+
     pop();
 }
 

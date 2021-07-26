@@ -1,5 +1,7 @@
 const WALKING_PLAYER = 0;
 const IDLE_PLAYER = 1;
+const AIR_PLAYER = 2;
+const PUNCH_PLAYER = 3;
 
 
 class Player extends BaseClass
@@ -31,15 +33,13 @@ class Player extends BaseClass
         handSprite.shapeColor = color;
         this.mining = {
             isMining: false,
-            what: null
+            what: null,
+            clubAssets: base.assets.tools,
+            handSprite: handSprite,
         };
-        this.mining.handSprite = handSprite;
-        this.mining.clubAssets = base.assets.tools;
-        var miningHitbox = createSprite(x, y, 200, 20);
+        let miningHitbox = createSprite(x, y, 200, 20);
         miningHitbox.visible = false;
         this.mining.miningHitbox = miningHitbox;
-        this.mining.isMining = false;
-        this.mining.what = null;
 
         this.ropeRaycast = createSprite(x, y, 2000, 400);
         this.ropeRaycast.visible = false;
@@ -53,46 +53,99 @@ class Player extends BaseClass
         this.animation = {
             images: {
                 idle: base.assets.player.idle,
-                walking: base.assets.player.walking
+                walking: [
+                    base.assets.player.walking[0], base.assets.player.walking[1], base.assets.player.walking[2], base.assets.player.walking[3], base.assets.player.walking[4], base.assets.player.walking[5], base.assets.player.walking[2], base.assets.player.walking[1]
+                ],
+                air: [
+                    base.assets.player.walking[4]
+                ],
+                punch: base.assets.player.punch
             },
+            direction: 1,
             state: WALKING_PLAYER
         }
     }
 
     updateAnimationState()
     {
+        if (this.body.velocity.x !== 0)
+        {
+            this.animation.direction = Math.sign(this.body.velocity.x)
+        }
         if (keyDown("a") || keyDown("d") || keyDown("left") || keyDown("right"))
         {
-            this.animation.state
+            this.animation.state = WALKING_PLAYER;
+        }
+        else
+        {
+            this.animation.state = IDLE_PLAYER;
+        }
+        if (!this.grounded)
+        {
+            this.animation.state = AIR_PLAYER;
+        }
+        if (this.mining.isMining)
+        {
+            if (this.inventory.tool === -1)
+            {
+                this.animation.state = PUNCH_PLAYER;
+            }
+            this.animation.direction = Math.sign(this.mining.what.sprite.position.x - this.sprite.position.x)
         }
     }
 
-    // display()
-    // {
-    //     var currentImg;
+    display()
+    {
+        var currentImg;
 
-    //     if (this.animation.state === WALKING_PLAYER)
-    //     {
-    //         currentImg = this.animation.images.walking[Math.round(frameCount / 5) % 4];
-    //     }
-    //     else
-    //     {
-    //         currentImg = this.animation.images.idle[0];
-    //     }
+        if (this.animation.state === WALKING_PLAYER)
+        {
+            currentImg = this.animation.images.walking[Math.round(frameCount / 4) % (this.animation.images.walking.length)];
+        }
+        else if (this.animation.state === IDLE_PLAYER)
+        {
+            currentImg = this.animation.images.idle[0];
+        }
+        else if (this.animation.state === AIR_PLAYER)
+        {
+            currentImg = this.animation.images.air[0];
+        }
+
+        switch (this.animation.state) {
+            case WALKING_PLAYER:
+                currentImg = this.animation.images.walking[Math.round(frameCount / 4) % (this.animation.images.walking.length)];
+                break;
+
+            case IDLE_PLAYER:
+                currentImg = this.animation.images.idle[0];
+                break;
+
+            case AIR_PLAYER:
+                currentImg = this.animation.images.air[0];
+                break;
+
+            case PUNCH_PLAYER:
+                currentImg = this.animation.images.punch[Math.round(frameCount / 4) % (this.animation.images.punch.length)];
+                break;
+
+            default:
+                break;
+        }
         
 
-    //     var angle = this.sprite.rotation;
-    //     push();
-    //     translate(this.body.position.x, this.body.position.y);
-    //     rotate(angle);
-    //     imageMode(CENTER);
-    //     image(currentImg, 0, 0, this.width, this.height);
-    //     pop();
+        var angle = this.sprite.rotation;
+        push();
+        translate(this.body.position.x, this.body.position.y);
+        rotate(angle);
+        imageMode(CENTER);
+        scale(this.animation.direction, 1)
+        image(currentImg, 0, 0, this.width, this.height);
+        pop();
 
-    //     this.sprite.x = this.body.position.x;
-    //     this.sprite.y = this.body.position.y;
-    //     this.sprite.rotation = 180*this.body.angle/PI;
-    // }
+        this.sprite.x = this.body.position.x;
+        this.sprite.y = this.body.position.y;
+        this.sprite.rotation = 180*this.body.angle/PI;
+    }
 
     addForce(x, y, isPlayerMovement)
     {
@@ -109,7 +162,8 @@ class Player extends BaseClass
                 this.stats.health -= magnitude/((this.stats.air > 50) ? 16 : 8);
             }
         }
-        Matter.Body.applyForce(this.body, this.body.position, {x: x, y: y});
+        var m = (this.width * this.height) / 2800
+        Matter.Body.applyForce(this.body, this.body.position, {x: x * m, y: y * m});
     }
     
     //player movement
@@ -237,16 +291,16 @@ class Player extends BaseClass
     {
         var centerPos = {x: this.sprite.x, y: this.sprite.y - (this.height * 1.5)};
 
-        base.renderStuff.progressBar(centerPos.x - 100, centerPos.y - 50, centerPos.x + 100, centerPos.y - 25, [0, 200, 50, 180], [0, 0, 0, 10], this.stats.health/100);
+        base.renderStuff.progressBar(centerPos.x - 100, centerPos.y - 50, centerPos.x + 100, centerPos.y - 25, [0, 200, 50, 180], [0, 0, 0, 10], this.stats.health/100, "HEALTH", [255, 255, 255]);
 
         if (this.stats.stamina < 90)
         {
-            base.renderStuff.progressBar(centerPos.x - 100, centerPos.y - 25, centerPos.x + 100, centerPos.y, [255, 165, 0, 180], [0, 0, 0, 10], this.stats.stamina/100);
+            base.renderStuff.progressBar(centerPos.x - 100, centerPos.y - 25, centerPos.x + 100, centerPos.y, [255, 165, 0, 180], [0, 0, 0, 10], this.stats.stamina/100, "STAMINA", [255, 255, 255]);
         }
         
         if (this.stats.air < 95)
         {
-            base.renderStuff.progressBar(centerPos.x - 100, centerPos.y, centerPos.x + 100, centerPos.y + 25, [50, 180, 255, 180], [0, 0, 0, 10], this.stats.air/100);
+            base.renderStuff.progressBar(centerPos.x - 100, centerPos.y, centerPos.x + 100, centerPos.y + 25, [50, 180, 255, 180], [0, 0, 0, 10], this.stats.air/100, "OXYGEN", [255, 255, 255]);
         }
     }
     
@@ -259,15 +313,15 @@ class Player extends BaseClass
         camera.position = {x: this.body.position.x, y: this.body.position.y};
     }
 
-    updateHandPos()
+    updateHandPos() // originally the hand, but now just an indicator of where you are pointing to mine
     {
         var mouseXOffset = (mouseX - (windowWidth/2));
         var mouseYOffset = (mouseY - (windowHeight/2));
         
-        var handOffset = base.mathStuff.normalize(mouseXOffset, mouseYOffset, 80);
+        var handOffset = base.mathStuff.normalize(mouseXOffset, mouseYOffset, 80); // for the mining hitbox
         
         var mineAnimationOffset = Math.sin(frameCount / 2) / 4;
-        var animatedOffset = base.mathStuff.normalize(mouseXOffset, mouseYOffset, 50 * (1 + (this.mining.isMining * mineAnimationOffset)));
+        var animatedOffset = base.mathStuff.normalize(mouseXOffset, mouseYOffset, 100);
         
         fill("blue");
         noStroke();
@@ -288,7 +342,7 @@ class Player extends BaseClass
             translate(this.mining.handSprite.x, this.mining.handSprite.y);
             rotate(handAngleDeg + ((handOffset.x < 0) ? 180 : 0));
             imageMode(CENTER);
-            image(this.mining.clubAssets[this.inventory.tool], 0, -30, 100, 100);
+            image(this.mining.clubAssets[this.inventory.tool], 0, -30, 50, 50);
             pop();
         }
 
@@ -390,7 +444,7 @@ class Player extends BaseClass
         }
 
         
-        translate(this.sprite.x - (this.sprite.width*6*uiSizeMultiplier) / (zoom/0.6), this.sprite.y + (this.sprite.height*uiSizeMultiplier) / (zoom/0.6));
+        translate(this.sprite.x - (40*6*uiSizeMultiplier) / (zoom/0.6), this.sprite.y + (70*uiSizeMultiplier) / (zoom/0.6));
         var yOffset = -70*uiSizeMultiplier / (zoom/0.6);
         for (var i in this.inventory.content.materials)
         {
@@ -398,7 +452,7 @@ class Player extends BaseClass
             push();
             textAlign(RIGHT);
             text(i, 0, yOffset);
-            translate(this.sprite.width*uiSizeMultiplier / (zoom/0.6), 0);
+            translate(40*uiSizeMultiplier / (zoom/0.6), 0);
             textAlign(LEFT);
             text(this.inventory.content.materials[i], 0, yOffset);
             pop();
@@ -412,7 +466,7 @@ class Player extends BaseClass
         pop();
 
         //show crafting options
-        translate(this.sprite.x + (this.sprite.width*4*uiSizeMultiplier) / (zoom/0.6), this.sprite.y - (this.sprite.height*2*uiSizeMultiplier) / (zoom/0.6));
+        translate(this.sprite.x + (40*4*uiSizeMultiplier) / (zoom/0.6), this.sprite.y - (70*2*uiSizeMultiplier) / (zoom/0.6));
         textAlign(LEFT);
         textSize(20*uiSizeMultiplier / (zoom/0.6));
         strokeWeight(2*uiSizeMultiplier / (zoom/0.6));
@@ -451,6 +505,10 @@ class Player extends BaseClass
 
     doSounds()
     {
+        if (!buttonStuff.settings.soundEffects)
+        {
+            return;
+        }
         if (this.mining.isMining)
         {
             if (frameCount % 12 == 0)
@@ -600,6 +658,8 @@ class Player extends BaseClass
                 this.rope.disable();
             }
         }
+        
+        this.updateAnimationState();
 
         if (rocket)
         {
