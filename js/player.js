@@ -1,7 +1,8 @@
 const WALKING_PLAYER = 0;
 const IDLE_PLAYER = 1;
 const AIR_PLAYER = 2;
-const PUNCH_PLAYER = 3;
+const WATER_PLAYER = 3;
+const PUNCH_PLAYER = 4;
 
 
 class Player extends BaseClass
@@ -53,16 +54,25 @@ class Player extends BaseClass
         this.animation = {
             images: {
                 idle: base.assets.player.idle,
-                walking: [
-                    base.assets.player.walking[0], base.assets.player.walking[1], base.assets.player.walking[2], base.assets.player.walking[3], base.assets.player.walking[4], base.assets.player.walking[5], base.assets.player.walking[2], base.assets.player.walking[1]
-                ],
-                air: [
-                    base.assets.player.walking[4]
-                ],
-                punch: base.assets.player.punch
+                walk: base.assets.player.walk,
+                walkPattern: [0, 1, 2, 3, 4, 5, 2, 1],
+                air: {},
+                punch: {}
             },
             direction: 1,
             state: WALKING_PLAYER
+        }
+
+        this.animation.images.air.hand = base.assets.player.walk.hand[4];
+        for (var i in Inventory.materialLevels())
+        {
+            this.animation.images.air[Inventory.materialLevels()[i]] = base.assets.player.walk[Inventory.materialLevels()[i]][4];
+        }
+
+        this.animation.images.punch.hand = base.assets.player.hit.hand;
+        for (var i in Inventory.materialLevels())
+        {
+            this.animation.images.punch[Inventory.materialLevels()[i]] = base.assets.player.hit[Inventory.materialLevels()[i]];
         }
     }
 
@@ -84,12 +94,13 @@ class Player extends BaseClass
         {
             this.animation.state = AIR_PLAYER;
         }
+        if (this.inWater)
+        {
+            this.animation.state = WATER_PLAYER;
+        }
         if (this.mining.isMining)
         {
-            if (this.inventory.tool === -1)
-            {
-                this.animation.state = PUNCH_PLAYER;
-            }
+            this.animation.state = PUNCH_PLAYER;
             this.animation.direction = Math.sign(this.mining.what.sprite.position.x - this.sprite.position.x)
         }
     }
@@ -97,41 +108,40 @@ class Player extends BaseClass
     display()
     {
         var currentImg;
-
-        if (this.animation.state === WALKING_PLAYER)
+        
+        var toolLvl = Inventory.materialLevels()[this.inventory.tool];
+        if (toolLvl == undefined)
         {
-            currentImg = this.animation.images.walking[Math.round(frameCount / 4) % (this.animation.images.walking.length)];
-        }
-        else if (this.animation.state === IDLE_PLAYER)
-        {
-            currentImg = this.animation.images.idle[0];
-        }
-        else if (this.animation.state === AIR_PLAYER)
-        {
-            currentImg = this.animation.images.air[0];
+            toolLvl = "hand";
         }
 
         switch (this.animation.state) {
             case WALKING_PLAYER:
-                currentImg = this.animation.images.walking[Math.round(frameCount / 4) % (this.animation.images.walking.length)];
+                var index = this.animation.images.walkPattern[Math.round(frameCount / 4) % this.animation.images.walkPattern.length];
+                currentImg = this.animation.images.walk[toolLvl][index];
                 break;
 
             case IDLE_PLAYER:
-                currentImg = this.animation.images.idle[0];
+                currentImg = this.animation.images.idle[toolLvl];
                 break;
 
             case AIR_PLAYER:
-                currentImg = this.animation.images.air[0];
+                currentImg = this.animation.images.air[toolLvl];
+                break;
+            
+            case WATER_PLAYER:
+                currentImg = this.animation.images.punch[toolLvl][0];
                 break;
 
             case PUNCH_PLAYER:
-                currentImg = this.animation.images.punch[Math.round(frameCount / 4) % (this.animation.images.punch.length)];
+                currentImg = this.animation.images.punch[toolLvl][Math.round(frameCount / 4) % (this.animation.images.punch[toolLvl].length)];
                 break;
 
             default:
                 break;
         }
         
+        this.rope.drawLine([157, 131, 97], 10);
 
         var angle = this.sprite.rotation;
         push();
@@ -145,6 +155,7 @@ class Player extends BaseClass
         this.sprite.x = this.body.position.x;
         this.sprite.y = this.body.position.y;
         this.sprite.rotation = 180*this.body.angle/PI;
+
     }
 
     addForce(x, y, isPlayerMovement)
@@ -291,26 +302,27 @@ class Player extends BaseClass
     {
         var centerPos = {x: this.sprite.x, y: this.sprite.y - (this.height * 1.5)};
 
-        base.renderStuff.progressBar(centerPos.x - 100, centerPos.y - 50, centerPos.x + 100, centerPos.y - 25, [0, 200, 50, 180], [0, 0, 0, 10], this.stats.health/100, "HEALTH", [255, 255, 255]);
+        base.renderStuff.progressBar(centerPos.x - 100, centerPos.y - 50, centerPos.x + 100, centerPos.y - 25, [0, 200, 50, 180], [0, 0, 0, 10], this.stats.health/100, "HEALTH", [255, 255, 255], .3, 2);
 
         if (this.stats.stamina < 90)
         {
-            base.renderStuff.progressBar(centerPos.x - 100, centerPos.y - 25, centerPos.x + 100, centerPos.y, [255, 165, 0, 180], [0, 0, 0, 10], this.stats.stamina/100, "STAMINA", [255, 255, 255]);
+            base.renderStuff.progressBar(centerPos.x - 100, centerPos.y - 25, centerPos.x + 100, centerPos.y, [255, 165, 0, 180], [0, 0, 0, 10], this.stats.stamina/100, "STAMINA", [255, 255, 255], .3, 2);
         }
         
         if (this.stats.air < 95)
         {
-            base.renderStuff.progressBar(centerPos.x - 100, centerPos.y, centerPos.x + 100, centerPos.y + 25, [50, 180, 255, 180], [0, 0, 0, 10], this.stats.air/100, "OXYGEN", [255, 255, 255]);
+            base.renderStuff.progressBar(centerPos.x - 100, centerPos.y, centerPos.x + 100, centerPos.y + 25, [50, 180, 255, 180], [0, 0, 0, 10], this.stats.air/100, "OXYGEN", [255, 255, 255], .3, 2);
         }
     }
     
-    respawn()
+    respawn() // instead of respawning this will make it lose the game
     {
-        this.stats.stamina = 50;
-        this.stats.health = 80;
-        this.stats.air = 100;
-        this.resetPosition();
-        camera.position = {x: this.body.position.x, y: this.body.position.y};
+        location = 'end/end.html?lose';
+        // this.stats.stamina = 50;
+        // this.stats.health = 80;
+        // this.stats.air = 100;
+        // this.resetPosition();
+        // camera.position = {x: this.body.position.x, y: this.body.position.y};
     }
 
     updateHandPos() // originally the hand, but now just an indicator of where you are pointing to mine
@@ -336,15 +348,6 @@ class Player extends BaseClass
         var handAngleDeg = 180*(Math.atan2(handOffset.y, handOffset.x)/PI); 
         this.mining.handSprite.rotation = handAngleDeg;
         this.mining.miningHitbox.rotation = handAngleDeg;
-        if (this.mining.clubAssets[this.inventory.tool])
-        {
-            push();
-            translate(this.mining.handSprite.x, this.mining.handSprite.y);
-            rotate(handAngleDeg + ((handOffset.x < 0) ? 180 : 0));
-            imageMode(CENTER);
-            image(this.mining.clubAssets[this.inventory.tool], 0, -30, 50, 50);
-            pop();
-        }
 
         this.ropeRaycast.x = handOffset.x*7 + this.sprite.x
         this.ropeRaycast.y = handOffset.y*7 + this.sprite.y;
@@ -409,85 +412,6 @@ class Player extends BaseClass
         base.renderStuff.progressBar(-this.mining.miningHitbox.width/2, -this.mining.miningHitbox.height/2, this.mining.miningHitbox.width/2, this.mining.miningHitbox.height/2, [122, 71, 0], [0, 0, 0, 10], minable.mining.health/minable.mining.originalHealth);
         pop();
     }
-    
-    showInventory()
-    {
-        var uiSizeMultiplier = 2;
-        
-        push();
-        textSize(30*uiSizeMultiplier / (zoom/0.6));
-        fill("white");
-        stroke("black");
-        strokeWeight(3*uiSizeMultiplier / (zoom/0.6));
-
-        //show items the player has
-        if (!this.viewInventory)
-        {
-            return;
-        }
-        else
-        {
-            paused = true;
-        }
-        background(0, 0, 0, 150);
-        push();
-
-        if (windowHeight / windowWidth >= 1220/1000)
-        {
-            push();
-            translate(this.sprite.x, this.sprite.y - (this.sprite.height*2*uiSizeMultiplier) / (zoom/0.6));
-            textAlign(CENTER);
-            textSize(20*uiSizeMultiplier / (zoom/0.6));
-            text("Your screen might\nbe too tall or\ntoo thin to see\nthe inventory!", 0, 0);
-            pop();
-            
-        }
-
-        
-        translate(this.sprite.x - (40*6*uiSizeMultiplier) / (zoom/0.6), this.sprite.y + (70*uiSizeMultiplier) / (zoom/0.6));
-        var yOffset = -70*uiSizeMultiplier / (zoom/0.6);
-        for (var i in this.inventory.content.materials)
-        {
-            yOffset += 35*uiSizeMultiplier / (zoom/0.6);
-            push();
-            textAlign(RIGHT);
-            text(i, 0, yOffset);
-            translate(40*uiSizeMultiplier / (zoom/0.6), 0);
-            textAlign(LEFT);
-            text(this.inventory.content.materials[i], 0, yOffset);
-            pop();
-        }
-        text("MATERIALS", 0, -100*uiSizeMultiplier / (zoom/0.6));
-        if (yOffset == -70*uiSizeMultiplier / (zoom/0.6))
-        {
-            textAlign(LEFT);
-            text("No materials", 0, 0);
-        }
-        pop();
-
-        //show crafting options
-        translate(this.sprite.x + (40*4*uiSizeMultiplier) / (zoom/0.6), this.sprite.y - (70*2*uiSizeMultiplier) / (zoom/0.6));
-        textAlign(LEFT);
-        textSize(20*uiSizeMultiplier / (zoom/0.6));
-        strokeWeight(2*uiSizeMultiplier / (zoom/0.6));
-        yOffset = 0;
-        var k = 1;
-        for (var i in Inventory.costs())
-        {
-            yOffset += 24*uiSizeMultiplier / (zoom/0.6);
-            text("[" + k + "] - " + i + " costs", 0, yOffset);
-            for (var t in Inventory.costs()[i])
-            {
-                yOffset += 24*uiSizeMultiplier / (zoom/0.6);
-                text(Inventory.costs()[i][t] + " " + t, 50 / (zoom/0.6), yOffset);
-            }
-            yOffset += 8*uiSizeMultiplier / (zoom/0.6);
-            k++;
-        }
-        text("CRAFTING", 0, -28*uiSizeMultiplier / (zoom/0.6));
-
-        pop();
-    }
 
     doRope()
     {
@@ -528,33 +452,7 @@ class Player extends BaseClass
         {
             return;
         }
-
-        if (keyWentDown("e"))
-        {
-            if (this.viewInventory)
-            {
-                paused = false;
-            }
-            this.viewInventory = !this.viewInventory;
-        }
-        if (paused)
-        {
-            if (keyWentDown((Inventory.craftable().indexOf("rope")+1).toString()))
-            {
-                new GameMessage("Use 'R' or 'C' (when unpaused) for making/using a rope.", [168, 76, 50], [143, 51, 25], 60);
-                return;
-            }
-            for (var i = 1; i < 7; i++)
-            {
-                if (keyWentDown(i.toString()))
-                {
-                    this.inventory.craft(Inventory.craftable()[i-1]);
-                }
-            }
-
-            
-            return;
-        }
+        
         Matter.Body.setAngle(this.body, this.body.angle % (2*PI));
         this.inWater = this.checkWater();
         if (!this.inWater)

@@ -87,32 +87,21 @@ canvas {
 
 button {
   cursor: pointer;
-}
-
-#backToGameBtn {
-  width: 100px;
-  height: 200px;
-  background-color: rgba(49, 64, 151, 0.5);
-}
-
-#backToGameBtn:hover {
-  transform: scale(1.2) translate(-5%, 5%);
-}
-
-.buttoncontainer #backToGameBtn h1 {
-  text-align: center;
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
-  color: lightgray;
+  background-color: rgba(0, 0, 0, 0.5);
+  border: 0;
+  color: white;
+  font-size: 20px;
+  padding: 20px;
 }
 
 .tutorial {
   position: fixed;
   display: block;
-  right: 5%;
+  left: 50%;
   bottom: 5%;
   width: 45vw;
+  min-width: 10vw;
+  max-width: 48vw;
   max-height: 40vh;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 9;
@@ -122,18 +111,30 @@ button {
   overflow: auto;
   padding-left: 20;
   padding-right: 20;
+  resize: horizontal;
 }
 
-.inventory {
+.tutorial h3 {
+  font-weight: 0;
+}
+
+.inventory, .crafting {
   position: fixed;
   display: block;
   margin: 5px;
-  top: 7%;
+  top: 70px;
   z-index: 5;
   padding: 20px;
+  max-height: 60vh;
+  overflow: auto;
+  cursor: default;
 }
 
-.inventoryitem {
+.inventory:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.inventoryitem, .craftingitem {
   display: flex;
   /* border: solid 1px; */
   /* background-color: rgba(0, 0, 0, 0.5); */
@@ -154,9 +155,57 @@ button {
   /* border: solid 1px; */
 }
 
-.inventoryitem h4 {
+.inventoryitem h4, .craftingitem h4 {
   /* border: solid 1px; */
   margin-top: auto;
   margin-left: 20px;
   color: black;
+}
+
+.crafting {
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  transition: 0.5s;
+}
+
+.craftingitem {
+  width: 100%;
+  margin: 0;
+  height: 50px;
+  cursor: pointer;
+}
+
+.craftingitem h4 {
+  color: white;
+  margin-right: 20px;
+}
+
+.craftingitem button {
+  width: 0;
+  transform: scale(0%);
+}
+
+.craftingitem:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.craftingitem:hover button {
+  transform: scale(100%);
+  width: min-content;
+}
+
+.craftingitem button {
+  transition: 0.2s;
+}
+
+.craftingitem button:hover {
+  transform: scale(1.1);
+}
+
+.craftingitem button:active {
+  background-color: rgba(112, 112, 112, 0.5);
 }

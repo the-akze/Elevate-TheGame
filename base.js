@@ -2,6 +2,8 @@ var allBodyItems = [];
 
 var allGrounds = [];
 
+var allGrass = [];
+
 var allMtnParts = [];
 
 var allTrees = [];
@@ -25,6 +27,7 @@ base.mathStuff = {};
 base.renderStuff = {};
 base.gameStuff = {};
 base.assets = {};
+base.htmlStuff = {};
 
 base.renderStuff.displayBody = (body, color) =>
 {
@@ -40,22 +43,33 @@ base.renderStuff.displayBody = (body, color) =>
     pop();
 }
 
-base.renderStuff.progressBar = (x1, y1, x2, y2, barColor, bgColor, value, txt, textColor) =>
+base.renderStuff.progressBar = (x1, y1, x2, y2, barColor, bgColor, value, txt, textColor, shakeBelow, shakeMagnitude) =>
 {
     push();
     noStroke();
     rectMode(CORNERS);
     fill(bgColor);
-    rect(x1, y1, x2, y2);
+
+    var offset = {x: 0, y: 0};
+    if (shakeBelow)
+    {
+        if (value < shakeBelow)
+        {
+            var mag = shakeMagnitude ? shakeMagnitude : 5;
+            offset = base.mathStuff.normalize(random(-1, 1), random(-1, 1), mag);
+        }
+    }
+
+    rect(x1 + offset.x, y1 + offset.y, x2 + offset.x, y2 + offset.y);
     fill(barColor);
-    rect(x1, y1, lerp(x1, x2, value), y2);
+    rect(x1 + offset.x, y1 + offset.y, lerp(x1 + offset.x, x2 + offset.x, value), y2 + offset.y);
 
     if (txt)
     {
         fill(textColor);
         textAlign(CENTER);
         textSize(12);
-        text(txt, (x1 + x2)/2, (y1 + y2)/2 + 4);
+        text(txt, (x1 + offset.x + x2 + offset.x)/2, (y1 + offset.y + y2 + offset.y)/2 + 4);
     }
 
     pop();
@@ -104,4 +118,10 @@ base.gameStuff.doZoom = (increase, defaultZoom) =>
     {
         zoom = defaultZoom;
     }
+}
+
+base.htmlStuff.quickDuplicateElement = (element, removeId) =>
+{
+    var e = element.cloneNode(true);
+    element.parentElement.appendChild(e);
 }

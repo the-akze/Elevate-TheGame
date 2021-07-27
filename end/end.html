@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Elevate - You beat the game!</title>
+    <link rel="icon" href="../assets/logo/logo.svg"/>
+    <link rel="stylesheet" type="text/css" href="../gamePageStyle.css">
+
+    <!--libraries-->
+    <script src="../libraries/p5.js"></script>
+    <script src="../libraries/p5.dom.min.js"></script>
+    <script src="../libraries/p5.sound.min.js"></script>
+    <script src="../libraries/p5.play.js"></script>
+
+    <!--js-->
+    
+    <meta charset="utf-8">
+
+    <style>
+      .youwontxtcontainer {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 10;
+      }
+
+      .youwontxt {
+        font-size: 4vh;
+        color: rgb(59, 84, 184);
+        text-shadow: 0px 0px 5px rgb(34, 49, 107);
+      }
+
+      #backToGameBtn {
+        width: 200px;
+        height: 200px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        background-color: rgba(29, 84, 187, 0.486);
+        color: white;
+        z-index: 15;
+      }
+    </style>
+    <script src="gameFinished.js"></script>
+
+  </head>
+  <body>
+
+      <div class="buttoncontainer">
+        <div class="leftbuttons"></div>
+        <div class="rightbuttons">
+          <div class="gamebutton" id="backToGameBtn" onclick="location = origin">
+            <h1>
+              Play the game again
+            </h1>
+          </div>
+        </div>
+      </div>
+
+      <div class="youwontxtcontainer">
+        <h1 class="youwontxt" id="endtxt">
+          You Won!
+        </h1>
+        <h2 class="youwontxt">
+          Click<br/>"Play the game again"<br/>to play again...
+        </h2>
+      </div>
+
+</body>
+</html>

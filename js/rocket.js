@@ -28,7 +28,7 @@ class Rocket
         zoom = 0.4;
         if (this.flySprite.y < -15000)
         {
-            document.location.replace("end/beatGame.html");
+            location = "end/end.html";
         }
     }
 }

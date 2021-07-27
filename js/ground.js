@@ -1,6 +1,6 @@
 class Ground extends BaseClass
 {
-    constructor(x, y, width, height, color, image, minableMaterial)
+    constructor(x, y, width, height, color, image, minableMaterial, isGrass)
     {
         super(x, y, width, height, color, image, true);
         Matter.Body.setStatic(this.body, true);
@@ -16,6 +16,13 @@ class Ground extends BaseClass
                     break;
                 }
             }
+        }
+        
+        this.isGrass = isGrass;
+        if (isGrass)
+        {
+            allGrass.push(this);
+            
         }
 
         if (minableMaterial)

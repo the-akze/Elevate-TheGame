@@ -84,6 +84,7 @@ class Tree
         {
             return;
         }
+        // if ()
         this.mining.health = this.mining.health - strength;
         if (this.mining.health <= 0)
         {

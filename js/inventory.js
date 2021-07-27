@@ -24,6 +24,7 @@ class Inventory
             }
         }
 
+        buttonStuff.inventoryUI.update();
         
     }
 
@@ -70,7 +71,7 @@ class Inventory
         }
         if (!afford)
         {
-            new GameMessage("You need more " + missing + " to make " + product, [168, 76, 50], [143, 51, 25], 60);
+            new GameMessage("You need more " + missing + " to make " + product.replace("Club", "Fist"), [168, 76, 50], [143, 51, 25], 60);
             return;
         }
         if (Inventory.craftable().indexOf(product) == -1)
@@ -97,18 +98,20 @@ class Inventory
             var index = Inventory.clubLevels().indexOf(product);
             if (index > this.tool)
             {
-                new GameMessage("Successfully upgraded tool to " + product, [35, 186, 113], [10, 161, 88], 60);
+                new GameMessage("Successfully upgraded fist to " + product.replace("Club", "Fist"), [35, 186, 113], [10, 161, 88], 60);
             }
             else if (index < this.tool)
             {
-                new GameMessage("Successfully downgraded tool to " + product, [35, 186, 113], [10, 161, 88], 60);
+                new GameMessage("Successfully downgraded fist to " + product.replace("Club", "Fist"), [35, 186, 113], [10, 161, 88], 60);
             }
             else
             {
-                new GameMessage("Successfully wasted materials\nto remake a " + product, [35, 186, 113], [10, 161, 88], 60);
+                new GameMessage("Successfully wasted materials\nto remake a " + product.replace("Club", "Fist"), [35, 186, 113], [10, 161, 88], 60);
             }
             this.tool = Inventory.clubLevels().indexOf(product);
         }
+
+        buttonStuff.inventoryUI.update();
     }
 
     makeRope()
@@ -130,6 +133,8 @@ class Inventory
         {
             new GameMessage("You need 12 cotton to make a rope.", [168, 76, 50], [143, 51, 25], 60);
         }
+
+        buttonStuff.inventoryUI.update();
     }
 
     static itemClassification()
@@ -217,23 +222,23 @@ class Inventory
         return {
             woodClub:
             {
-                wood: 5
+                wood: 4
             },
             stoneClub:
             {
-                stone: 5
+                stone: 4
             },
             ironClub:
             {
-                iron: 5
+                iron: 4
             },
             bronzeClub:
             {
-                bronze: 5
+                bronze: 4
             },
             diamondClub:
             {
-                diamond: 5
+                diamond: 4
             },
             bronze:
             {

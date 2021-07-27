@@ -58,9 +58,36 @@ class BaseClass
                     {
                         for (var y = this.initialY - (this.height/2); y < this.initialY + (this.height/2); y += sizeY)
                         {
-                            if (dist(player.sprite.x, player.sprite.y, x, y) < 1500)
+                            if (dist(camera.x, camera.y, x+(sizeX/2), y+(sizeY/2)) < 1600)
                             {
                                 image(this.image, x, y, sizeX, sizeY);
+                            }
+                        }
+                    }
+                    if (this.isGrass)
+                    {
+                        if (((this.width % 100) == 0) && (this.height % 100) == 0)
+                        {
+                            sizeX = 100;
+                            sizeY = 100;
+                        }
+                        for (var x = this.initialX - (this.width/2); x < this.initialX + (this.width/2); x += sizeX)
+                        {
+                            var y = this.initialY - (this.height/2) - (sizeY);
+                            if (dist(camera.x, camera.y, x+(sizeX/2), y+(sizeY/2)) < 1600)
+                            {
+                                if (x == this.initialX - (this.width/2))
+                                {
+                                    image(base.assets.textures[9], x, y, sizeX, sizeY);
+                                }
+                                else if (x + sizeX == this.initialX + (this.width/2))
+                                {
+                                    image(base.assets.textures[10], x, y, sizeX, sizeY);
+                                }
+                                else
+                                {
+                                    image(base.assets.textures[8], x, y, sizeX, sizeY);
+                                }
                             }
                         }
                     }

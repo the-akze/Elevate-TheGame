@@ -48,11 +48,7 @@
           <div class="gamebutton" id="pauseBtn" onclick="buttonStuff.togglePause();"></div>
         </div>
         <div class="rightbuttons">
-          <div class="gamebutton" id="inventoryBtn" onclick="
-          if (!player.playing) { return; }
-          if (player.viewInventory) { paused = false; }
-          player.viewInventory = !player.viewInventory;
-          "></div>
+          <div class="gamebutton" id="inventoryBtn" onclick="buttonStuff.inventoryUI.crafting.toggleShow();"></div>
           <h1 id="fpsText" style="position: fixed; margin-left: -100px;">
             FPS
           </h1>
@@ -93,6 +89,10 @@
           Sound Effects
         </button>
         
+        <button onclick="buttonStuff.updateSettings({showFramerate: !buttonStuff.settings.showFramerate});" id="showFramerateSetting">
+          Show Framerate
+        </button>
+        
       </div>
 
       <div class="tutorial" id="tutorial">
@@ -108,56 +108,136 @@
         <button onclick="buttonStuff.tutorial.changePageBy(-1);">
           PREVIOUS
         </button>
+        <button onclick="buttonStuff.updateSettings({help: false})" style="position: fixed; top: 5px; right: 5px; width: fit-content; text-align: center; align-items: center; align-content: center; font-size: small;">
+          HIDE
+        </button>
       </div>
 
-      <!-- <div class="inventory" id="inventory">
+      <div class="inventory" id="inventory">
         
-        <div class="inventoryitem" id="wood">
+        <div class="inventoryitem" id="wooditem">
           <div class="inventoryicon" id="woodicon"></div>
           <h4 id="woodamt"></h4>
         </div>
         
-        <div class="inventoryitem" id="stone">
+        <div class="inventoryitem" id="stoneitem">
           <div class="inventoryicon" id="stoneicon"></div>
           <h4 id="stoneamt"></h4>
         </div>
         
-        <div class="inventoryitem" id="iron">
+        <div class="inventoryitem" id="ironitem">
           <div class="inventoryicon" id="ironicon"></div>
           <h4 id="ironamt"></h4>
         </div>
         
-        <div class="inventoryitem" id="copper">
+        <div class="inventoryitem" id="copperitem">
           <div class="inventoryicon" id="coppericon"></div>
           <h4 id="copperamt"></h4>
         </div>
         
-        <div class="inventoryitem" id="bronze">
+        <div class="inventoryitem" id="bronzeitem">
           <div class="inventoryicon" id="bronzeicon"></div>
           <h4 id="bronzeamt"></h4>
         </div>
         
-        <div class="inventoryitem" id="diamond">
+        <div class="inventoryitem" id="diamonditem">
           <div class="inventoryicon" id="diamondicon"></div>
           <h4 id="diamondamt"></h4>
         </div>
         
-        <div class="inventoryitem" id="coal">
+        <div class="inventoryitem" id="coalitem">
           <div class="inventoryicon" id="coalicon"></div>
           <h4 id="coalamt"></h4>
         </div>
         
-        <div class="inventoryitem" id="cotton">
+        <div class="inventoryitem" id="cottonitem">
           <div class="inventoryicon" id="cottonicon"></div>
           <h4 id="cottonamt"></h4>
         </div>
         
-        <div class="inventoryitem" id="graphene">
+        <div class="inventoryitem" id="grapheneitem">
           <div class="inventoryicon" id="grapheneicon"></div>
           <h4 id="grapheneamt"></h4>
         </div>
         
-      </div> -->
+      </div>
+
+      <div class="crafting" id="crafting">
+
+        <div class="craftingitem" id="craftingitem_woodClub">
+          <!-- <button class="craftBtn">
+            CRAFT
+          </button> -->
+          <h4>Wooden Fist</h4>
+        </div>
+
+        <div class="craftingitem" id="craftingitem_stoneClub">
+          <!-- <button class="craftBtn">
+            CRAFT
+          </button> -->
+          <h4>Stone Fist</h4>
+        </div>
+
+        <div class="craftingitem" id="craftingitem_ironClub">
+          <!-- <button>
+            CRAFT
+          </button> -->
+          <h4>Iron Fist</h4>
+        </div>
+
+        <div class="craftingitem" id="craftingitem_bronzeClub">
+          <!-- <button class="craftBtn">
+            CRAFT
+          </button> -->
+          <h4>Bronze Fist</h4>
+        </div>
+
+        <div class="craftingitem" id="craftingitem_diamondClub">
+          <!-- <button class="craftBtn">
+            CRAFT
+          </button> -->
+          <h4>Diamond Fist</h4>
+        </div>
+
+        <div class="craftingitem" id="craftingitem_bronze">
+          <!-- <button class="craftBtn">
+            CRAFT
+          </button> -->
+          <h4>Bronze</h4>
+        </div>
+
+        <div class="craftingitem" id="craftingitem_rope">
+          <!-- <button class="craftBtn">
+            CRAFT
+          </button> -->
+          <h4>Rope</h4>
+        </div>
+        
+      </div>
+
+      <script>
+        var p = document.getElementById("crafting");
+        for (var i in Inventory.costs())
+        {
+          var e = document.getElementById("craftingitem_" + i).getElementsByTagName("h4")[0];
+          if (e)
+          {
+            var cost = Inventory.costs()[i];
+            var c = [];
+            for (var t in cost)
+            {
+              c.push(cost[t].toString() + " " + t);
+            }
+            e.innerHTML = e.innerHTML + ": " + c.join(", ");
+          }
+          e.parentElement.onclick = eval(`() => {
+            if (player)
+            {
+              player.inventory.craft("` + i + `");
+            }
+          }`);
+        }
+      </script>
 
 </body>
 </html>

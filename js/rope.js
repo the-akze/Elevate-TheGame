@@ -55,7 +55,13 @@ class Rope
         
         var body1ConPos = {x:this.constraint.bodyA.position.x + this.constraint.pointA.x, y:this.constraint.bodyA.position.y + this.constraint.pointA.y};
         
-        line(body1ConPos.x, body1ConPos.y, this.point.x, this.point.y);
+        imageMode(CENTER);
+        image(base.assets.textures[7], this.point.x, this.point.y, 60, 60);
+
+        var n = base.mathStuff.normalize(this.point.x - player.sprite.position.x, this.point.y - player.sprite.position.y, 15);
+        
+        line(body1ConPos.x, body1ConPos.y, this.point.x - n.x, this.point.y - n.y);
+
         pop();
     }
 }

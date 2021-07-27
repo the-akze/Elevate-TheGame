@@ -18,8 +18,6 @@ var rocket;
 
 var zoom = 0.7;
 
-var paused;
-
 var darkness = 1;
 
 var w;
@@ -34,37 +32,131 @@ function preload()
     player:
     {
       idle:
-      [
-        loadImage("assets/player/pi1.png")
-      ],
-      walking:
-      [
-        loadImage("assets/player/pw1.png"),
-        loadImage("assets/player/pw2.png"),
-        loadImage("assets/player/pw3.png"),
-        loadImage("assets/player/pw4.png"),
-        loadImage("assets/player/pw5.png"),
-        loadImage("assets/player/pw6.png"),
-      ],
-      punch:
-      [
-        // loadImage("assets/player/swing1.png"),
-        loadImage("assets/player/swing2.png"),
-        loadImage("assets/player/swing3.png"),
-      ]
+      {
+        hand: loadImage("assets/player/idle/pi1.png"),
+        wood: loadImage("assets/player/idle/wood_pi1.png"),
+        stone: loadImage("assets/player/idle/stone_pi1.png"),
+        iron: loadImage("assets/player/idle/iron_pi1.png"),
+        bronze: loadImage("assets/player/idle/bronze_pi1.png"),
+        diamond: loadImage("assets/player/idle/diamond_pi1.png"),
+      },
+      // walking:
+      // [
+      //   loadImage("assets/player/walk/pw1.png"),
+      //   loadImage("assets/player/walk/pw2.png"),
+      //   loadImage("assets/player/walk/pw3.png"),
+      //   loadImage("assets/player/walk/pw4.png"),
+      //   loadImage("assets/player/walk/pw5.png"),
+      //   loadImage("assets/player/walk/pw6.png"),
+      // ],
+      walk:
+      {
+        hand:
+        [
+          loadImage("assets/player/walk/pw1.png"),
+          loadImage("assets/player/walk/pw2.png"),
+          loadImage("assets/player/walk/pw3.png"),
+          loadImage("assets/player/walk/pw4.png"),
+          loadImage("assets/player/walk/pw5.png"),
+          loadImage("assets/player/walk/pw6.png"),
+        ],
+        wood: 
+        [
+          loadImage("assets/player/walk/wood/wood_pw1.png"),
+          loadImage("assets/player/walk/wood/wood_pw2.png"),
+          loadImage("assets/player/walk/wood/wood_pw3.png"),
+          loadImage("assets/player/walk/wood/wood_pw4.png"),
+          loadImage("assets/player/walk/wood/wood_pw5.png"),
+          loadImage("assets/player/walk/wood/wood_pw6.png"),
+        ],
+        stone: 
+        [
+          loadImage("assets/player/walk/stone/stone_pw1.png"),
+          loadImage("assets/player/walk/stone/stone_pw2.png"),
+          loadImage("assets/player/walk/stone/stone_pw3.png"),
+          loadImage("assets/player/walk/stone/stone_pw4.png"),
+          loadImage("assets/player/walk/stone/stone_pw5.png"),
+          loadImage("assets/player/walk/stone/stone_pw6.png"),
+        ],
+        iron: 
+        [
+          loadImage("assets/player/walk/iron/iron_pw1.png"),
+          loadImage("assets/player/walk/iron/iron_pw2.png"),
+          loadImage("assets/player/walk/iron/iron_pw3.png"),
+          loadImage("assets/player/walk/iron/iron_pw4.png"),
+          loadImage("assets/player/walk/iron/iron_pw5.png"),
+          loadImage("assets/player/walk/iron/iron_pw6.png"),
+        ],
+        bronze: 
+        [
+          loadImage("assets/player/walk/bronze/bronze_pw1.png"),
+          loadImage("assets/player/walk/bronze/bronze_pw2.png"),
+          loadImage("assets/player/walk/bronze/bronze_pw3.png"),
+          loadImage("assets/player/walk/bronze/bronze_pw4.png"),
+          loadImage("assets/player/walk/bronze/bronze_pw5.png"),
+          loadImage("assets/player/walk/bronze/bronze_pw6.png"),
+        ],
+        diamond: 
+        [
+          loadImage("assets/player/walk/diamond/diamond_pw1.png"),
+          loadImage("assets/player/walk/diamond/diamond_pw2.png"),
+          loadImage("assets/player/walk/diamond/diamond_pw3.png"),
+          loadImage("assets/player/walk/diamond/diamond_pw4.png"),
+          loadImage("assets/player/walk/diamond/diamond_pw5.png"),
+          loadImage("assets/player/walk/diamond/diamond_pw6.png"),
+        ]
+      },
+      hit:
+      {
+        hand:
+        [
+          loadImage("assets/player/hit/swing1.png"),
+          loadImage("assets/player/hit/swing2.png"),
+        ],
+        wood: 
+        [
+          loadImage("assets/player/hit/wood/wood_swing1.png"),
+          loadImage("assets/player/hit/wood/wood_swing2.png"),
+        ],
+        stone: 
+        [
+          loadImage("assets/player/hit/stone/stone_swing1.png"),
+          loadImage("assets/player/hit/stone/stone_swing2.png"),
+        ],
+        iron: 
+        [
+          loadImage("assets/player/hit/iron/iron_swing1.png"),
+          loadImage("assets/player/hit/iron/iron_swing2.png"),
+        ],
+        bronze: 
+        [
+          loadImage("assets/player/hit/bronze/bronze_swing1.png"),
+          loadImage("assets/player/hit/bronze/bronze_swing2.png"),
+        ],
+        diamond: 
+        [
+          loadImage("assets/player/hit/diamond/diamond_swing1.png"),
+          loadImage("assets/player/hit/diamond/diamond_swing2.png"),
+        ]
+      },
+      // punch:
+      // [
+      //   loadImage("assets/player/swing1.png"),
+      //   loadImage("assets/player/swing2.png"),
+      // ]
     },
     // svgs:
     // [
 
     // ],
-    tools:
-    [
-        loadImage("assets/tools/woodClub.png"),
-        loadImage("assets/tools/stoneClub.png"),
-        loadImage("assets/tools/ironClub.png"),
-        loadImage("assets/tools/bronzeClub.png"),
-        loadImage("assets/tools/diamondClub.png")
-    ],
+    // tools:
+    // [
+    //     loadImage("assets/tools/woodClub.png"),
+    //     loadImage("assets/tools/stoneClub.png"),
+    //     loadImage("assets/tools/ironClub.png"),
+    //     loadImage("assets/tools/bronzeClub.png"),
+    //     loadImage("assets/tools/diamondClub.png")
+    // ],
     nature:
     {
       cotton:
@@ -95,13 +187,11 @@ function preload()
       loadImage("assets/textures/diamond.png"),
       loadImage("assets/textures/iron.png"),
       loadImage("assets/textures/coal.png"),
-    ],
-    trees:
-    [
-      loadImage("assets/trees/tree1.svg"),
-      loadImage("assets/trees/tree2.svg"),
-      loadImage("assets/trees/tree3.svg"),
-      loadImage("assets/trees/tree4.svg"),
+      loadImage("assets/textures/copper.png"),
+      loadImage("assets/textures/roped.png"),
+      loadImage("assets/textures/grassBlades.png"),
+      loadImage("assets/textures/grassBladesLeft.png"),
+      loadImage("assets/textures/grassBladesRight.png"),
     ],
     rocket:
     [
@@ -125,8 +215,10 @@ function preload()
       {
         woodHit: loadSound("assets/audio/soundEffects/woodHit.ogg"),
         stoneHit: loadSound("assets/audio/soundEffects/stoneHit.ogg"),
+        coalHit: loadSound("assets/audio/soundEffects/coalHit.ogg"),
         ironHit: loadSound("assets/audio/soundEffects/ironHit.ogg"),
         copperHit: loadSound("assets/audio/soundEffects/copperHit.ogg"),
+        diamondHit: loadSound("assets/audio/soundEffects/diamondHit.ogg"),
       }
     }
   };
@@ -136,6 +228,7 @@ function setup()
 {
   buttonStuff.updateSettingElements();
   buttonStuff.tutorial.update();
+  buttonStuff.inventoryUI.crafting.update();
 
   for (var i in Inventory.allMaterials())
   {
@@ -159,16 +252,16 @@ function setup()
   engine = Engine.create();
   world = engine.world;
 
-  layers.grass = new Ground(20000, 800, 39400, 400, "green", base.assets.textures[1]);
+  layers.grass = new Ground(20000, 800, 39400, 400, "green", base.assets.textures[1], undefined, true);
   layers.stone = new Stone(20000, 1850, 39400, 1700);
   layers.coal = new Coal(20000, 3900, 39400, 2400);
   layers.iron = new Iron(-800, 7600, 2200, 7000);
 
-  layers.landLeft1 = new Ground(-3400, 900, 3000, 400, "green", base.assets.textures[1]);
-  layers.landLeft2 = new Ground(-8900, 900, 2000, 400, "green", base.assets.textures[1]);
+  layers.landLeft1 = new Ground(-3400, 900, 3000, 400, "green", base.assets.textures[1], undefined, true);
+  layers.landLeft2 = new Ground(-8900, 900, 2000, 400, "green", base.assets.textures[1], undefined, true);
   layers.stoneLeft1 = new Stone(-3400, 3100, 3000, 4000);
   layers.stoneLeft2 = new Stone(-8900, 3100, 2000, 4000);
-  layers.mineMidLand = new Ground(-6400, 700, 2500, 50, "green", base.assets.textures[1]);
+  layers.mineMidLand = new Ground(-6400, 700, 2500, 50, "green", base.assets.textures[1], undefined, true);
   
   var its = 1;
   var y = 5700;
@@ -218,8 +311,10 @@ function setup()
     jumpStrength: -50
   }
   //the one and only player character
-  player = new Player(1000, 500, 40*1.6, 70*1.6, playerInfo, "blue", base.assets.player.idle[0]);
+  player = new Player(1000, 500, 40*1.6, 70*1.6, playerInfo, "blue", base.assets.player.idle.hand);
   // player = new Player(-5200, 400, 40*2, 70*2, playerInfo, "blue", base.assets.player.idle[0]);
+
+  buttonStuff.inventoryUI.update();
 
   //that big mountain to the right
   mountain = new Mountain("gray", 300, 5);
@@ -246,7 +341,14 @@ function setup()
 
   new Ropable(300, -100);
   new Ropable(-4800, 500)
+
+  // new GameMessage("Use WASD/Arrow keys to move.", 'white', 'gray', 150);
 }
+
+// var tutorial = {
+//   wasd: 0,
+//   treeBreak: 0
+// }
 
 function draw()
 {
@@ -258,10 +360,8 @@ function draw()
   {
     player.cameraMove(1);
   }
-  if (!paused)
-  {
-    Engine.update(engine);
-  }
+
+  Engine.update(engine);
 
   // var cd = base.mathStuff.clamp(darkness, 1, 10);
   // background(135/cd, 206/cd, 235/cd);
@@ -271,6 +371,23 @@ function draw()
   camera.zoom = zoom*height/900;
   
   player.play();
+
+  // tutorial message stuff
+  // if ((keyDown("w") || keyDown("a") || keyDown("s") || keyDown("d") || keyDown("up") || keyDown("left") || keyDown("down") || keyDown("right")) && tutorial.wasd == 0)
+  // {
+  //   tutorial.wasd = 1;
+  // }
+  // if (tutorial.wasd == 1 && (frameCount > 90))
+  // {
+  //   new GameMessage("Point your cursor and hold space to mine something.\nBreak a tree.", 'white', 'gray', 150);
+  //   tutorial.wasd = 2;
+  // }
+  // if (tutorial.treeBreak == 1)
+  // {
+  //   new GameMessage("Mine 3 more trees.\nThere are more, left of the water.");
+  // }
+  // end of tutorial message stuff
+
   if (rocket && rocket.hasCoal)
   {
     rocket.fly();
@@ -294,16 +411,20 @@ function displayAll()
 {
   mainMountain.display();
   mountain.display();
-  for (var b in allBodyItems)
-  {
-    allBodyItems[b].display();
-  }
   for (var t in allTrees)
   {
     allTrees[t].swayLeaves();
     allTrees[t].display();
   }
   drawSprites();
+  for (var b in allBodyItems)
+  {
+    if (allBodyItems[b].isGrass)
+    {
+      continue;
+    }
+    allBodyItems[b].display();
+  }
   for (var w in allWaterBodies)
   {
     allWaterBodies[w].display();
@@ -327,6 +448,10 @@ function displayAll()
       c--;
     }
   }
+  for (var g in allGrass)
+  {
+    allGrass[g].display();
+  }
   player.drawStats();
   player.displayMinableMiningHealth();
   for (var n = 0; n < allNotifications.length; n++)
@@ -339,7 +464,7 @@ function displayAll()
       n--;
     }
   }
-  player.showInventory();
+  
 }
 
 function checkToResizeCanvas()
@@ -425,21 +550,19 @@ function screenshotInNewTab()
 /* TODO
 
 - IN-GAME:
-
-  - Shorten words of tutorial.
-  - Change grass image.
-  - Show materials on screen.
-    - Change inventory UI.
-  - fps setting
-  - Fix memory bug
-  - Rope hook
-  - person swimming animation
-  - tool in hand
-  - better bg
-  - 
+  - all done
 
 - Home page:
-  - 
+  - show the game in home page background
+
+- beat game page:
+  - fix text position, instead of text on canvas make it an h1
+
+
+OPTIONAL (maybe):
+- Fix memory bug (play page)
+- Improve person swimming animation (play page)
+- Improve grass image (play page)
 
 
 */
