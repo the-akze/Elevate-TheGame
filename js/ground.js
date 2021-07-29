@@ -72,7 +72,7 @@ class Ground extends BaseClass
             }
             else
             {
-                new GameMessage("Can't break " + this.mining.material + " with " + material, [168, 76, 50], [143, 51, 25], 60);
+                new GameMessage("Can't break " + this.mining.material + " with " + material + ".\nYou need " + Inventory.minimumMaterialToolBreaks()[this.mining.material] + " or stronger to break this.", [168, 76, 50], [143, 51, 25], 150);
             }
         }
     }

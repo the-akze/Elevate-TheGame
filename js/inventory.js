@@ -210,6 +210,19 @@ class Inventory
         }
     }
 
+    static minimumMaterialToolBreaks()
+    {
+        return {
+            wood: "hand",
+            stone: "woodFist",
+            iron: "stoneFist",
+            copper: "ironFist",
+            diamond: "bronzeFist",
+            coal: "stone",
+            graphene: "diamond",
+        }
+    }
+
     static craftable()
     {
         var a = [];

@@ -623,7 +623,7 @@ class Player extends BaseClass
                 else if (mountain.highestPoint.y < -1690)
                 {
                     grapheneWall = new GrapheneWall(mountain.highestPoint.x + 1000, mountain.highestPoint.y);
-                    rocket = new Rocket(mountain.highestPoint.x + 4000, mountain.highestPoint.y);
+                    rocket = new Rocket(mountain.highestPoint.x + 3000, mountain.highestPoint.y);
                     mountain.done = true;
                     break;
                 }

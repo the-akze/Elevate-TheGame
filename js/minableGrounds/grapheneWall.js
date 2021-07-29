@@ -14,9 +14,9 @@ class GrapheneWall extends Ground
         }
         if (Inventory.materialBreaks()[material].indexOf(this.mining.material) == -1)
         {
-            if ((frameCount % 30) == 0)
+            if ((frameCount % 60) == 0)
             {
-                new GameMessage("Can't break " + this.mining.material + " with " + material, [168, 76, 50], [143, 51, 25], 60);
+                new GameMessage("Can't break " + this.mining.material + " with " + material + ".\nYou need " + Inventory.minimumMaterialToolBreaks()[this.mining.material] + " or stronger to break this.", [168, 76, 50], [143, 51, 25], 150);
             }
             return;
         }
@@ -35,7 +35,7 @@ class GrapheneWall extends Ground
             }
             else
             {
-                new GameMessage("Can't break " + this.mining.material + " with " + material, [168, 76, 50], [143, 51, 25], 60);
+                new GameMessage("Can't break " + this.mining.material + " with " + material + ".\nYou need " + Inventory.minimumMaterialToolBreaks()[this.mining.material] + " or stronger to break this.", [168, 76, 50], [143, 51, 25], 150);
             }
         }
     }
