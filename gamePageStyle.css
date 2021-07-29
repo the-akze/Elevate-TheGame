@@ -53,7 +53,11 @@ canvas {
 }
 
 #inventoryBtn {
-  background-image: url("assets/buttons/inventory.svg");
+  background-image: url("assets/buttons/crafting.svg");
+}
+
+#helpBtn {
+  background-image: url("assets/buttons/help.svg");
 }
 
 .pausemenu {
@@ -130,6 +134,10 @@ button {
   cursor: default;
 }
 
+.inventory {
+  top: 120px;
+}
+
 .inventory:hover {
   background-color: rgba(255, 255, 255, 0.2);
 }
@@ -147,7 +155,6 @@ button {
   width: 20px;
   height: 20px;
   background-size: contain;
-  border-radius: 20px;
   /* position: relative; */
   /* display: block; */
   /* top: 50%; */
@@ -170,6 +177,7 @@ button {
   flex-direction: column;
   align-items: flex-end;
   transition: 0.5s;
+  z-index: 21;
 }
 
 .craftingitem {

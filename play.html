@@ -46,10 +46,11 @@
       <div class="buttoncontainer">
         <div class="leftbuttons">
           <div class="gamebutton" id="pauseBtn" onclick="buttonStuff.togglePause();"></div>
+          <div class="gamebutton" id="helpBtn" onclick="buttonStuff.updateSettings({help: !buttonStuff.settings.help});"></div>
         </div>
         <div class="rightbuttons">
           <div class="gamebutton" id="inventoryBtn" onclick="buttonStuff.inventoryUI.crafting.toggleShow();"></div>
-          <h1 id="fpsText" style="position: fixed; margin-left: -100px;">
+          <h1 id="fpsText" style="position: fixed; left: 200px; top: 100px;">
             FPS
           </h1>
         </div>
@@ -165,52 +166,35 @@
       <div class="crafting" id="crafting">
 
         <div class="craftingitem" id="craftingitem_woodClub">
-          <!-- <button class="craftBtn">
-            CRAFT
-          </button> -->
           <h4>Wooden Fist</h4>
         </div>
 
         <div class="craftingitem" id="craftingitem_stoneClub">
-          <!-- <button class="craftBtn">
-            CRAFT
-          </button> -->
           <h4>Stone Fist</h4>
         </div>
 
         <div class="craftingitem" id="craftingitem_ironClub">
-          <!-- <button>
-            CRAFT
-          </button> -->
           <h4>Iron Fist</h4>
         </div>
 
         <div class="craftingitem" id="craftingitem_bronzeClub">
-          <!-- <button class="craftBtn">
-            CRAFT
-          </button> -->
           <h4>Bronze Fist</h4>
         </div>
 
         <div class="craftingitem" id="craftingitem_diamondClub">
-          <!-- <button class="craftBtn">
-            CRAFT
-          </button> -->
           <h4>Diamond Fist</h4>
         </div>
 
         <div class="craftingitem" id="craftingitem_bronze">
-          <!-- <button class="craftBtn">
-            CRAFT
-          </button> -->
           <h4>Bronze</h4>
         </div>
 
         <div class="craftingitem" id="craftingitem_rope">
-          <!-- <button class="craftBtn">
-            CRAFT
-          </button> -->
           <h4>Rope</h4>
+        </div>
+
+        <div class="craftingitem" id="craftingitem_rope" onclick="buttonStuff.inventoryUI.crafting.toggleShow();">
+          <h4>CLOSE</h4>
         </div>
         
       </div>

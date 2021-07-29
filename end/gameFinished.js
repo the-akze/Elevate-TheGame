@@ -15,14 +15,12 @@ function setup()
     var e = document.getElementById("endtxt");
     if (e)
     {
-      console.log("lost");
       e.innerHTML = "You lost...";
       won = false;
       document.title = "Elevate - You lost"
     }
     else
     {
-      console.log("what");
     }
   }
   canv = createCanvas(windowWidth,windowHeight);

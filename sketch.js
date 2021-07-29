@@ -203,8 +203,10 @@ function preload()
       stone: loadImage("assets/materialIcons/stone.png"),
       iron: loadImage("assets/materialIcons/iron.png"),
       coal: loadImage("assets/materialIcons/coal.png"),
-      // copper: loadImage("assets/materialIcons/copper.png"),
+      copper: loadImage("assets/materialIcons/copper.png"),
+      bronze: loadImage("assets/materialIcons/bronze.png"),
       diamond: loadImage("assets/materialIcons/diamond.png"),
+      graphene: loadImage("assets/materialIcons/graphene.png"),
       cotton: loadImage("assets/materialIcons/cotton.png"),
       wood: loadImage("assets/materialIcons/wood.png"),
     },
@@ -307,8 +309,8 @@ function setup()
 
   var playerInfo = 
   {
-    moveSpeed: 5,
-    jumpStrength: -50
+    moveSpeed: 6,
+    jumpStrength: -55
   }
   //the one and only player character
   player = new Player(1000, 500, 40*1.6, 70*1.6, playerInfo, "blue", base.assets.player.idle.hand);
@@ -553,13 +555,13 @@ function screenshotInNewTab()
   - all done
 
 - Home page:
-  - show the game in home page background
+  - all done
 
 - beat game page:
-  - fix text position, instead of text on canvas make it an h1
+  - all done
 
 
-OPTIONAL (maybe):
+OPTIONAL (less important):
 - Fix memory bug (play page)
 - Improve person swimming animation (play page)
 - Improve grass image (play page)

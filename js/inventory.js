@@ -34,7 +34,10 @@ class Inventory
         {
             var nc = this.content[classification][item] + count;
             // new GameMessage("+" + count + " " + item + ((((nc % 3) == 0) || ((nc % 5) == 0)) && (item != "cotton") ? "\n('E' to see materials and crafting)" : ""), [35, 186, 113], [10, 161, 88], 60, base.assets.materialIcons[item], 30, 30);
-            new GameMessage("", undefined, undefined, undefined, base.assets.materialIcons[item], 30, 30);
+            if (count != 0)
+            {
+                new GameMessage("", undefined, undefined, undefined, base.assets.materialIcons[item], 30, 30);
+            }
         }
         if (this.content[classification][item])
         {

@@ -142,11 +142,6 @@ var buttonStuff = {
                 if (e)
                 {
                     e.style.right = buttonStuff.inventoryUI.crafting.show ? "0" : "-500px";
-                    console.log("h");
-                }
-                else
-                {
-                    console.log("what");
                 }
             },
             toggleShow: () =>
@@ -155,5 +150,5 @@ var buttonStuff = {
                 buttonStuff.inventoryUI.crafting.update();
             }
         }
-    }
+    },
 }

@@ -21,7 +21,7 @@ class Player extends BaseClass
         this.inWater = false;
         this.targetSwimAngle = 0;
 
-        this.inventory = new Inventory({});
+        this.inventory = new Inventory({wood: 0, stone: 0, iron: 0, copper: 0, bronze: 0, diamond: 0, coal: 0, cotton: 0, graphene: 0});
 
         this.viewInventory = false;
 
@@ -107,6 +107,13 @@ class Player extends BaseClass
 
     display()
     {
+        if (rocket)
+        {
+            if (rocket.hasCoal)
+            {
+                return;
+            }
+        }
         var currentImg;
         
         var toolLvl = Inventory.materialLevels()[this.inventory.tool];
@@ -165,12 +172,17 @@ class Player extends BaseClass
         {
             if (this.stats.stamina < 1)
             {
-                return;
+                x /= 2;
+                y /= 2;
             }
             this.stats.stamina -= magnitude/((this.stats.air > 50) ? 10 : 5);
             if (this.stats.stamina < 5)
             {
                 this.stats.health -= magnitude/((this.stats.air > 50) ? 16 : 8);
+            }
+            else if (this.stats.stamina < 30)
+            {
+                this.stats.health -= magnitude/16;
             }
         }
         var m = (this.width * this.height) / 2800
@@ -285,7 +297,7 @@ class Player extends BaseClass
 
         if (keyDown("up") || keyDown("w"))
         {
-            this.addForce(0, -5, true);
+            this.addForce(0, -2, true);
         }
         else
         {
@@ -468,6 +480,11 @@ class Player extends BaseClass
             {
                 Matter.Body.setAngularVelocity(this.body, lerp(this.body.angularVelocity, -this.body.angle, (this.grounded ? 0.002 : 0.01) * 1));
             }
+            world.gravity.y = 1;
+        }
+        else
+        {
+            world.gravity.y = 0.1;
         }
 
         this.rope.drawLine([157, 131, 97], 10);
@@ -512,7 +529,7 @@ class Player extends BaseClass
         
         if (this.stats.air < 20)
         {
-            this.stats.health -= 0.25;
+            this.stats.stamina -= 1;
         }
         
         //respawn if fallen into the void
@@ -571,6 +588,8 @@ class Player extends BaseClass
                         {
                             this.inventory.content.materials.coal = this.inventory.content.materials.coal - 20;
                             rocket.hasCoal = true;
+                            this.sprite.visible = false;
+                            this.mining.handSprite.visible = false;
                             new GameMessage("Blast off!", [35, 186, 113], [10, 161, 88], 60);
                         }
                         else
