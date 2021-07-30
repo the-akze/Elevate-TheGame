@@ -51,6 +51,11 @@ class Inventory
 
     craft(product)
     {
+        if (product == "rope")
+        {
+            this.makeRope();
+            return;
+        }
         var cost = Inventory.costs()[product];
         var afford = true;
         var missing = null;
