@@ -140,6 +140,18 @@ class Inventory
         buttonStuff.inventoryUI.update();
     }
 
+    hasSomething()
+    {
+        for (var m in player.inventory.content.materials)
+        {
+            if (player.inventory.content.materials[m] > 0)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     static itemClassification()
     {
         return {

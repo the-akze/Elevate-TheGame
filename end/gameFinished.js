@@ -10,10 +10,10 @@ var won = true;
 
 function setup()
 {
-  if (location.search.indexOf('lose') != -1)
+  var e = document.getElementById("endtxt");
+  if (e)
   {
-    var e = document.getElementById("endtxt");
-    if (e)
+    if (location.search.indexOf('lose') != -1)
     {
       e.innerHTML = "You lost...";
       won = false;
@@ -21,6 +21,8 @@ function setup()
     }
     else
     {
+      e.innerHTML = "You won!";
+      document.title = "Elevate - You beat the game!";
     }
   }
   canv = createCanvas(windowWidth,windowHeight);

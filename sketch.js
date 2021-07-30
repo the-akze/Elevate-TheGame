@@ -210,6 +210,10 @@ function preload()
       cotton: loadImage("assets/materialIcons/cotton.png"),
       wood: loadImage("assets/materialIcons/wood.png"),
     },
+    sign:
+    [
+      loadImage("assets/textures/sign.png")
+    ],
 
     audio:
     {
@@ -221,6 +225,7 @@ function preload()
         ironHit: loadSound("assets/audio/soundEffects/ironHit.ogg"),
         copperHit: loadSound("assets/audio/soundEffects/copperHit.ogg"),
         diamondHit: loadSound("assets/audio/soundEffects/diamondHit.ogg"),
+        grapheneHit: loadSound("assets/audio/soundEffects/grapheneHit.ogg"),
       }
     }
   };
@@ -314,7 +319,7 @@ function setup()
   }
   //the one and only player character
   player = new Player(1000, 500, 40*1.6, 70*1.6, playerInfo, "blue", base.assets.player.idle.hand);
-  // player = new Player(-5200, 400, 40*2, 70*2, playerInfo, "blue", base.assets.player.idle[0]);
+  // player = new Player(-5200, 400, 40*2, 70*2, playerInfo, "blue", base.assets.player.idle.hand);
 
   buttonStuff.inventoryUI.update();
 
@@ -341,16 +346,16 @@ function setup()
     cottons.push(new Cotton(i, 675));
   }
 
-  new Ropable(300, -100);
+  new Ropable(300, 200);
   new Ropable(-4800, 500)
 
   // new GameMessage("Use WASD/Arrow keys to move.", 'white', 'gray', 150);
-}
 
-// var tutorial = {
-//   wasd: 0,
-//   treeBreak: 0
-// }
+  new Sign(400, 600, `Go left to reach the mine. There, you can mine for more materials and upgrade your fist enough, until you are ready to climb the mountain and beat the game!`);
+  new Sign(2100, 600, `Ready to climb the mountain? Be sure you have the tool and all the materials and you need to beat the game.`);
+  
+  new Sign(-4700, 700, `This is the mine, where you can mine materials. Keep upgrading your fist so that you can mine stronger materials and finally achieve a diamond fist. Also be sure to get cotton and make a rope!`);
+}
 
 function draw()
 {
@@ -374,22 +379,6 @@ function draw()
   
   player.play();
 
-  // tutorial message stuff
-  // if ((keyDown("w") || keyDown("a") || keyDown("s") || keyDown("d") || keyDown("up") || keyDown("left") || keyDown("down") || keyDown("right")) && tutorial.wasd == 0)
-  // {
-  //   tutorial.wasd = 1;
-  // }
-  // if (tutorial.wasd == 1 && (frameCount > 90))
-  // {
-  //   new GameMessage("Point your cursor and hold space to mine something.\nBreak a tree.", 'white', 'gray', 150);
-  //   tutorial.wasd = 2;
-  // }
-  // if (tutorial.treeBreak == 1)
-  // {
-  //   new GameMessage("Mine 3 more trees.\nThere are more, left of the water.");
-  // }
-  // end of tutorial message stuff
-
   if (rocket && rocket.hasCoal)
   {
     rocket.fly();
@@ -411,6 +400,10 @@ function draw()
 
 function displayAll()
 {
+  for (var s in allSigns)
+  {
+    allSigns[s].display();
+  }
   mainMountain.display();
   mountain.display();
   for (var t in allTrees)

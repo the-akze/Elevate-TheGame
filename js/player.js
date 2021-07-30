@@ -25,10 +25,11 @@ class Player extends BaseClass
 
         this.viewInventory = false;
 
-        this.stats = {};
-        this.stats.stamina = 50;
-        this.stats.health = 80;
-        this.stats.air = 100;
+        this.stats = {
+            stamina: 70,
+            health: 100,
+            air: 100
+        };
 
         var handSprite = createSprite(x, y, 10, 10);
         handSprite.shapeColor = color;
@@ -74,6 +75,13 @@ class Player extends BaseClass
         {
             this.animation.images.punch[Inventory.materialLevels()[i]] = base.assets.player.hit[Inventory.materialLevels()[i]];
         }
+
+        this.waterAnimationHitbox = createSprite(0, 0, 1, height/2);
+        this.waterAnimationDirection = 1;
+        this.waterAnimationHitbox.visible = false;
+
+        this.signDetectHitbox = createSprite(0, 0, width * 7, height * 4);
+        this.signDetectHitbox.visible = false;
     }
 
     updateAnimationState()
@@ -94,7 +102,7 @@ class Player extends BaseClass
         {
             this.animation.state = AIR_PLAYER;
         }
-        if (this.inWater)
+        if (this.checkAnimationWater())
         {
             this.animation.state = WATER_PLAYER;
         }
@@ -107,6 +115,10 @@ class Player extends BaseClass
 
     display()
     {
+        this.waterAnimationHitbox.x = this.sprite.x;
+        this.waterAnimationHitbox.y = this.sprite.y - this.width/4;
+        this.signDetectHitbox.x = this.sprite.x;
+        this.signDetectHitbox.y = this.sprite.y;
         if (rocket)
         {
             if (rocket.hasCoal)
@@ -178,11 +190,11 @@ class Player extends BaseClass
             this.stats.stamina -= magnitude/((this.stats.air > 50) ? 10 : 5);
             if (this.stats.stamina < 5)
             {
-                this.stats.health -= magnitude/((this.stats.air > 50) ? 16 : 8);
+                this.stats.health -= magnitude/((this.stats.air > 50) ? 16 : 8) + 0.2;
             }
             else if (this.stats.stamina < 30)
             {
-                this.stats.health -= magnitude/16;
+                this.stats.health -= magnitude/16 + 0.01;
             }
         }
         var m = (this.width * this.height) / 2800
@@ -266,6 +278,26 @@ class Player extends BaseClass
         }
         return false;
     }
+    
+    checkAnimationWater()
+    {
+        if (keyDown("left") || keyDown("a"))
+        {
+            this.waterAnimationDirection = -1;
+        }
+        if (keyDown("right") || keyDown("d"))
+        {
+            this.waterAnimationDirection = 1;
+        }
+        for (var w in allWaterBodies)
+        {
+            if (allWaterBodies[w].sprite.isTouching(this.waterAnimationHitbox))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 
     tryToJump(force)
     {
@@ -288,12 +320,51 @@ class Player extends BaseClass
     
     swim(drag)
     {
-        Matter.Body.setVelocity(this.body, {x: this.body.velocity.x*drag, y: this.body.velocity.y*drag});
-        if (this.body.speed > 2.5)
+        if (this.checkAnimationWater())
         {
-            this.targetSwimAngle = Math.atan2(this.body.velocity.y, this.body.velocity.x);
+            Matter.Body.setVelocity(this.body, {x: this.body.velocity.x*drag, y: this.body.velocity.y*drag});
+            // if (this.body.speed > 2.5)
+            // {
+                this.checkAnimationWater();
+                switch (this.waterAnimationDirection) {
+                    case 1:
+                        if (keyDown("w") || keyDown("up"))
+                        {
+                            this.targetSwimAngle = 60 * PI/180;
+                        }
+                        else if (keyDown("s") || keyDown("down"))
+                        {
+                            this.targetSwimAngle = 120 * PI/180;
+                        }
+                        else
+                        {
+                            this.targetSwimAngle = 90 * PI/180;
+                        }
+                        break;
+                        
+                    case -1:
+                        if (keyDown("w") || keyDown("up"))
+                        {
+                            this.targetSwimAngle = 300 * PI/180;
+                        }
+                        else if (keyDown("s") || keyDown("down"))
+                        {
+                            this.targetSwimAngle = 240 * PI/180;
+                        }
+                        else
+                        {
+                            this.targetSwimAngle = 270 * PI/180;
+                        }
+                        
+                        break;
+                
+                    default:
+                        break;
+                }
+            // }
+            // Matter.Body.setAngularVelocity(this.body, ((PI/2 + this.targetSwimAngle - this.body.angle) * 0.1));
+            Matter.Body.setAngularVelocity(this.body, ((this.targetSwimAngle - this.body.angle) * 0.1));
         }
-        Matter.Body.setAngularVelocity(this.body, ((PI/2 + this.targetSwimAngle - this.body.angle) * 0.1));
 
         if (keyDown("up") || keyDown("w"))
         {
@@ -456,6 +527,23 @@ class Player extends BaseClass
             }
         }
     }
+
+    detectSigns()
+    {
+        var touchingSign = false;
+        for (var s in allSigns)
+        {
+            if (allSigns[s].sprite.isTouching(this.signDetectHitbox))
+            {
+                touchingSign = true;
+                Sign.setSign(allSigns[s].message);
+            }
+        }
+        if (!touchingSign)
+        {
+            Sign.hideSign();
+        }
+    }
     
     //play, what it does each frame supposedly
     play()
@@ -497,6 +585,23 @@ class Player extends BaseClass
         }
 
         this.move((keyDown("right") || keyDown("d")) - (keyDown("left") || keyDown("a")));
+
+        this.detectSigns();
+
+        if (this.stats.stamina > 95)
+        {
+            this.stats.health += 0.2;
+        }
+
+        if (this.stats.stamina > 60)
+        {
+            this.stats.stamina += 0.02;
+        }
+
+        if (this.stats.stamina < 30)
+        {
+            this.stats.stamina -= 0.3;
+        }
 
         //make ground sensor position at the foot of the player's body
         this.updateGroundSensor();
@@ -618,10 +723,12 @@ class Player extends BaseClass
                 {
                     new Ropable(mountain.highestPoint.x + 100, mountain.highestPoint.y - 800);
                     new Ropable(mountain.highestPoint.x - 300, mountain.highestPoint.y - 600);
+                    new Sign(mountain.highestPoint.x - 100, mountain.highestPoint.y + 50, "How do you get up there? Hmm... well, there seems to be rope hooks you can rope onto...");
                     mountain.generateMountain({x: 100, y: 400});
                 }
                 else if (mountain.highestPoint.y < -1690)
                 {
+                    new Sign(mountain.highestPoint.x + 300, mountain.highestPoint.y, "You need something strong to break that wall...");
                     grapheneWall = new GrapheneWall(mountain.highestPoint.x + 1000, mountain.highestPoint.y);
                     rocket = new Rocket(mountain.highestPoint.x + 3000, mountain.highestPoint.y);
                     mountain.done = true;

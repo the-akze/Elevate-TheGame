@@ -18,6 +18,10 @@ var allRopable = [];
 
 var allNotifications = [];
 
+var allSigns = [];
+
+var focusedSignMsg = "";
+
 var mainMountain = null;
 
 var voidY = 3000;

@@ -43,6 +43,7 @@
     <script src="js/tree.js"></script>
     <script src="js/waterBody.js"></script>
     <script src="js/cotton.js"></script>
+    <script src="js/sign.js"></script>
     
     <link rel="stylesheet" type="text/css" href="gamePageStyle.css">
     <meta charset="utf-8">
@@ -206,30 +207,71 @@
         </div>
         
       </div>
+      
+      <div class="tip" style="top: 2px; left: 80px;">
+        <h4>
+          ← Settings can be changed here.
+        </h4>
+        <div class="tipclose tcright"><div class="tipcloseimg"></div></div>
+      </div>
+
+      <div class="tip" style="top: 70px; left: 80px;">
+        <h4>
+          ← Use this to toggle the tutorial.
+        </h4>
+        <div class="tipclose tcright"><div class="tipcloseimg"></div></div>
+      </div>
+      
+      <div class="tip" style="top: 10px; right: 80px;">
+        <div class="tipclose tcleft"><div class="tipcloseimg"></div></div>
+        <h4>
+          Use this for crafting. →
+        </h4>
+      </div>
+
+      <div class="signcontainer" id="signcontainer">
+        <h1>Sign says...</h1>
+        <div class="sign" id="sign">
+          <h2 id="signMessage">
+            
+          </h2>
+        </div>
+      </div>
 
       <script>
-        var p = document.getElementById("crafting");
-        for (var i in Inventory.costs())
+        (() =>
         {
-          var e = document.getElementById("craftingitem_" + i).getElementsByTagName("h4")[0];
-          if (e)
+          var p = document.getElementById("crafting");
+          for (var i in Inventory.costs())
           {
-            var cost = Inventory.costs()[i];
-            var c = [];
-            for (var t in cost)
+            var e = document.getElementById("craftingitem_" + i).getElementsByTagName("h4")[0];
+            if (e)
             {
-              c.push(cost[t].toString() + " " + t);
+              var cost = Inventory.costs()[i];
+              var c = [];
+              for (var t in cost)
+              {
+                c.push(cost[t].toString() + " " + t);
+              }
+              e.innerHTML = e.innerHTML + ": " + c.join(", ");
             }
-            e.innerHTML = e.innerHTML + ": " + c.join(", ");
+            e.parentElement.onclick = eval(`() => {
+              if (player)
+              {
+                player.inventory.craft("` + i + `");
+              }
+            }`);
           }
-          e.parentElement.onclick = eval(`() => {
-            if (player)
-            {
-              player.inventory.craft("` + i + `");
-            }
-          }`);
-        }
-      </script>
 
-</body>
-</html>
+          let tips = document.getElementsByClassName("tipclose");
+          for (var t in tips)
+          {
+            tips[t].onclick = (e) => {
+              e.path[0].parentElement.style.display = "none";
+            }
+          }
+        })();
+      </script>
+      
+    </body>
+    </html>
