@@ -354,7 +354,7 @@ function setup()
   new Sign(400, 600, `Go left to reach the mine. There, you can mine for more materials and upgrade your fist enough, until you are ready to climb the mountain and beat the game!`);
   new Sign(2100, 600, `Ready to climb the mountain? Be sure you have the tool and all the materials and you need to beat the game.`);
   
-  new Sign(-4700, 700, `This is the mine, where you can mine materials. Keep upgrading your fist so that you can mine stronger materials and finally achieve a diamond fist. Also be sure to get cotton and make a rope!`);
+  new Sign(-4700, 700, `This is the mine, where you can mine materials. Keep upgrading your fist so that you can mine stronger materials and finally achieve a diamond fist. Also be sure to get cotton and make a rope! Most importantly, get 20 coal.`);
 }
 
 function draw()
