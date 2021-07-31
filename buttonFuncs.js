@@ -83,7 +83,7 @@ var buttonStuff = {
             "As you go up, you will reach a place you cannot jump to.<br/>Luckily, there are the copper boxes, which you can rope onto to get up there!",
             "As you keep moving right, you will reach a black wall made of graphene.<br/>This is why you needed a diamond fist; to break the wall.",
             "Once you have broken the wall, keep moving right until you see a rocket.",
-            "Now, the rocket can't power itself...<br/>here's where you use your 20 coal and blast off into space!",
+            "Now, the rocket can't power itself...<br/>here's where you use your 20 coal and blast off into space! Press space while near the rocket to power it.",
             "That's the end of the tutorial and game!"
             
         ],
